@@ -466,13 +466,16 @@ bash<span class="w"> </span>Anaconda3-2023.03-Linux-x86_64.sh
 <p>Python本身就是一门编程语言，支持的功能很简陋，我们之所以爱用Python是因为其丰富的第三方库。而Python的第三方库和C++需要自己编译不同，有统一的包管理软件：pip</p>
 <p>我们常用的Python包有：</p>
 <ul class="simple">
-<li><p>Numpy：Python的数值计算库，提供基本的向量、矩阵、张量操作。</p></li>
-<li><p>Scipy：提供高阶算法，例如特殊函数、ODE求解等。</p></li>
-<li><p>Matplotlib：仿matlab画图的库。</p></li>
-<li><p>Pytorch：可微科学计算库。（Numpy+Scipy+Differentiable）</p></li>
+<li><p><a class="reference external" href="https://numpy.org/">Numpy</a>：Python的数值计算库，提供基本的向量、矩阵、张量操作。</p></li>
+<li><p><a class="reference external" href="https://numpy.org/">Scipy</a>：提供高阶算法，例如特殊函数、ODE求解等。</p></li>
+<li><p><a class="reference external" href="https://matplotlib.org/">Matplotlib</a>：仿matlab画图的库。</p></li>
+<li><p><a class="reference external" href="https://pytorch.org/">Pytorch</a>：可微科学计算库。（Numpy+Scipy+Differentiable）</p></li>
 </ul>
-<p>Python自带的包管理软件就是pip</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy
+<p>Python自带的包管理软件就是pip，我们可以用pip方便的安装和卸载python包。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w">     </span><span class="c1"># 使用 pip 安装 numpy</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">numpy</span><span class="o">==</span><span class="m">1</span>.0.0<span class="w">     </span><span class="c1"># 使用 pip 安装特定版本 numpy</span>
+pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>--user<span class="w">     </span><span class="c1"># 使用 pip 安装 numpy 到个人目录 .pip 下</span>
+pip<span class="w"> </span>uninstall<span class="w"> </span>numpy<span class="w">          </span><span class="c1"># 删除 numpy 包</span>
 </pre></div>
 </div>
 </section>
