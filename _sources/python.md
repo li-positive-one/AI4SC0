@@ -6,7 +6,7 @@ Python本身的语法不复杂，直接看代码基本能看懂，所以这里�
 
 [官方文档](https://docs.python.org/zh-cn/3/)
 
-### 在Windows/Linux上安装Python
+## 在Windows/Linux上安装Python
 
 这里不建议大家直接安装Python，而建议安装Anaconda（这是一个打包了一些常用科学计算库，以及虚拟环境管理器的Python发行版）
 
@@ -21,7 +21,7 @@ bash Anaconda3-2023.03-Linux-x86_64.sh
 
 安装后打开终端。
 
-### Python包管理
+## Python包管理
 
 Python本身就是一门编程语言，支持的功能很简陋，我们之所以爱用Python是因为其丰富的第三方库。而Python的第三方库和C++需要自己编译不同，有统一的包管理软件：pip
 
