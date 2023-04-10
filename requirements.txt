@@ -6,3 +6,4 @@ docutils
 torch 
 torchvision 
 torchaudio
+matplotlib

@@ -27,15 +27,18 @@ Python本身就是一门编程语言，支持的功能很简陋，我们之所�
 
 我们常用的Python包有：
 
-* Numpy：Python的数值计算库，提供基本的向量、矩阵、张量操作。
-* Scipy：提供高阶算法，例如特殊函数、ODE求解等。
-* Matplotlib：仿matlab画图的库。
-* Pytorch：可微科学计算库。（Numpy+Scipy+Differentiable）
+* [Numpy](https://numpy.org/)：Python的数值计算库，提供基本的向量、矩阵、张量操作。
+* [Scipy](https://numpy.org/)：提供高阶算法，例如特殊函数、ODE求解等。
+* [Matplotlib](https://matplotlib.org/)：仿matlab画图的库。
+* [Pytorch](https://pytorch.org/)：可微科学计算库。（Numpy+Scipy+Differentiable）
 
-Python自带的包管理软件就是pip
+Python自带的包管理软件就是pip，我们可以用pip方便的安装和卸载python包。
 
 ```bash
-pip install numpy
+pip install numpy     # 使用 pip 安装 numpy
+pip install numpy==1.0.0     # 使用 pip 安装特定版本 numpy
+pip install numpy --user     # 使用 pip 安装 numpy 到个人目录 .pip 下
+pip uninstall numpy          # 删除 numpy 包
 ```
 
 ## Python虚拟环境管理
