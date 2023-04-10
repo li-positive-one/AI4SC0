@@ -7,7 +7,13 @@ parts:
 - caption: 教程
   chapters:
   - file: python
+    sections: 
+    - file: python_basic
+    - file: python_example
   - file: pytorch
+    sections: 
+    - file: pytorch_install
+    - file: pytorch_basic
   - file: neuraloperator
     sections:
     - file: fno
