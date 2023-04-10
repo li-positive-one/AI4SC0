@@ -3,8 +3,13 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: python
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+
+parts:
+- caption: 教程
+  chapters:
+  - file: python
+  - file: pytorch
+  - file: fno
+- caption: 补充
+  chapters:
+  - file: material
