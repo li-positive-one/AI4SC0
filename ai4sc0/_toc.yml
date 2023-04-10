@@ -6,11 +6,14 @@ root: intro
 parts:
 - caption: 教程
   chapters:
-  - file: pytorch_base
   - file: python
-  - file: fno
-  - file: notebooks
-  - file: markdown
+  - file: pytorch
+  - file: neuraloperator
+    sections:
+    - file: fno
+  - file: neuralsolution
+    sections:
+    - file: pinn
 - caption: 补充
   chapters:
   - file: material
