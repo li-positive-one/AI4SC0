@@ -52,7 +52,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Python 基础" href="python.html" />
+    <link rel="next" title="Python 入门" href="python.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -118,22 +118,56 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="python.html">
-   Python 基础
+   Python 入门
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_basic.html">
+     Python 基础
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example.html">
+     Python 例子
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="pytorch.html">
-   Pytorch基础
+   Pytorch 入门
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_install.html">
+     如何安装Pytorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_basic.html">
+     Pytorch基础
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="neuraloperator.html">
    Neural Operator
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -149,8 +183,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="neuralsolution.html">
    Neural Solution
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -355,14 +389,21 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-ai-4-sc-from-zero">
 <h1>Welcome to AI 4 SC from Zero<a class="headerlink" href="#welcome-to-ai-4-sc-from-zero" title="Permalink to this headline">#</a></h1>
-<p>这是为了在xx中心的三小时Pytorch基础知识讲座准备的，适用于完全没有机器学习实操经验的同学。</p>
-<p>主要是想结合一些AI4SC的经典工作，给大家普及Pytorch的使用。</p>
-<p>希望能让大家开始喜欢上AI4SC。</p>
+<p>这是为了三小时Pytorch基础知识讲座准备的，适用于完全没有机器学习实操经验的同学。</p>
+<p>课程的主要内容是想结合一些AI4SC的经典工作，给大家普及Pytorch的使用。</p>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">教程</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="python.html">Python 基础</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pytorch.html">Pytorch基础</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python 入门</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python_basic.html">Python 基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_example.html">Python 例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pytorch.html">Pytorch 入门</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pytorch_install.html">如何安装Pytorch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pytorch_basic.html">Pytorch基础</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="neuraloperator.html">Neural Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neuralsolution.html">Neural Solution</a></li>
 </ul>
@@ -405,7 +446,7 @@ title="Print to PDF"
     <a class='right-next' id="next-link" href="python.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Python 基础</p>
+        <p class="prev-next-title">Python 入门</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
