@@ -3,3 +3,6 @@ matplotlib
 numpy
 ghp-import
 docutils
+torch 
+torchvision 
+torchaudio
