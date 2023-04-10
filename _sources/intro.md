@@ -1,11 +1,10 @@
-# Welcome to your Jupyter Book
+# Welcome to AI 4 SC from Zero
 
-This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
+这是为了在xx中心的三小时Pytorch基础知识讲座准备的，适用于完全没有机器学习实操经验的同学。
 
-Check out the content pages bundled with this sample book to see more.
+主要是想结合一些AI4SC的经典工作，给大家普及Pytorch的使用。
+
+希望能让大家开始喜欢上AI4SC。
 
 ```{tableofcontents}
 ```
