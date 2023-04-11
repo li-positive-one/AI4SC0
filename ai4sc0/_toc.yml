@@ -9,7 +9,9 @@ parts:
   - file: python
     sections: 
     - file: python_basic
-    - file: python_example
+    - file: python_example1_numpy
+    - file: python_example2_torch
+    - file: python_example3_rte
   - file: pytorch
     sections: 
     - file: pytorch_install
