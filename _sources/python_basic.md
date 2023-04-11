@@ -1,10 +1,23 @@
 # Python 基础
 
-Python本身的语法不复杂，直接看代码基本能看懂，所以这里不介绍。但是其实隐藏了很多坑，有空还是系统的看一下比较好，了解一下数据类型、控制语句、函数和类相关的东西。
+Python本身的语法不复杂，直接看代码基本能看懂，所以这里不过多介绍。但是其实隐藏了很多坑，有空还是系统的看一下比较好，了解一下数据类型、控制语句、函数和类相关的东西。
 
 [菜鸟教程](https://www.runoob.com/python/python-tutorial.html)
 
 [官方文档](https://docs.python.org/zh-cn/3/)
+
+
+相比于C++，Python的工作方式更接近于MATLAB，我们有以下几种方式运行Python。
+
+- 命令行交互式
+- 命令行执行
+- Notebook中边编辑边执行
+
+![命令行交互式](https://content.lz1.fun/202304110849594.png)
+
+![命令行执行](https://content.lz1.fun/202304110850640.png)
+
+![Notebook中边编辑边执行](https://content.lz1.fun/202304110851891.png)
 
 ## 在Windows/Linux上安装Python
 

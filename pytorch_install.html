@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>如何安装Pytorch &#8212; AI4SC from Zero</title>
+    <title>如何安装PyTorch &#8212; AI4SC from Zero</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -135,8 +135,18 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python_example.html">
-     Python 例子
+    <a class="reference internal" href="python_example1_numpy.html">
+     Python 例1: 基于NumPy的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example2_torch.html">
+     Python 例2: 基于PyTorch的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example3_rte.html">
+     Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
     </a>
    </li>
   </ul>
@@ -153,7 +163,7 @@ const thebe_selector_output = ".output, .cell_output"
   <ul class="current">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     如何安装Pytorch
+     如何安装PyTorch
     </a>
    </li>
    <li class="toctree-l2">
@@ -364,23 +374,80 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nvidia">
+   安装Nvidia显卡驱动(可选)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   创建虚拟环境
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   安装Pytorch
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>如何安装Pytorch</h1>
+                <h1>如何安装PyTorch</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nvidia">
+   安装Nvidia显卡驱动(可选)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   创建虚拟环境
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   安装Pytorch
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -389,7 +456,40 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="pytorch">
-<h1>如何安装Pytorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h1>
+<h1>如何安装PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h1>
+<section id="nvidia">
+<h2>安装Nvidia显卡驱动(可选)<a class="headerlink" href="#nvidia" title="Permalink to this headline">#</a></h2>
+<p>对于带有nvidia显卡的机器，为了能让pytorch支持CUDA加速，我们需要安装显卡的驱动程序。</p>
+<p><a class="reference external" href="https://www.nvidia.com/download/index.aspx">驱动下载页面</a></p>
+<p>驱动安装完成后，我们可以通过nvidia-smi命令来查看显卡状态。</p>
+<p><img alt="" src="https://content.lz1.fun/202304110840378.png" /></p>
+</section>
+<section id="id1">
+<h2>创建虚拟环境<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p>因为我们有时候需要运行不同版本的pytorch，所以我们不直接安装pytorch，而先创建虚拟环境，将pytorch安装到虚拟环境中。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pytorch20<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+conda<span class="w"> </span>activate<span class="w"> </span>pytorch20
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>安装Pytorch<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://pytorch.org/get-started/locally/">PyTorch安装指引</a></p>
+<p>Pytorch的安装非常简单，而且也集成了相应CUDA库的安装，我们只需要选择相应的计算平台，使用pip或conda命令进行安装即可。(不建议混用conda或者pip，即在创建好环境后，如果用pip安装pytorch，之后的均一直用pip；否则一直用conda.)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="c1"># Linux, pip, GPU</span>
+pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w"> </span><span class="c1"># Linux, pip, CPU</span>
+conda<span class="w"> </span>install<span class="w"> </span>pytorch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>pytorch-cuda<span class="o">=</span><span class="m">11</span>.7<span class="w"> </span>-c<span class="w"> </span>pytorch<span class="w"> </span>-c<span class="w"> </span>nvidia<span class="w"> </span><span class="c1"># Linux, conda, GPU</span>
+conda<span class="w"> </span>install<span class="w"> </span>pytorch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>cpuonly<span class="w"> </span>-c<span class="w"> </span>pytorch<span class="w"> </span><span class="c1"># Linux, conda, CPU</span>
+</pre></div>
+</div>
+<p>安装好后，我们运行python，然后在python的交互式命令中输入</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>看是否能正常运行。</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

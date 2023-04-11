@@ -52,7 +52,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Python 例子" href="python_example.html" />
+    <link rel="next" title="Python 例1: 基于NumPy的基本操作" href="python_example1_numpy.html" />
     <link rel="prev" title="Python 入门" href="python.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -135,8 +135,18 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python_example.html">
-     Python 例子
+    <a class="reference internal" href="python_example1_numpy.html">
+     Python 例1: 基于NumPy的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example2_torch.html">
+     Python 例2: 基于PyTorch的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example3_rte.html">
+     Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
     </a>
    </li>
   </ul>
@@ -153,7 +163,7 @@ const thebe_selector_output = ".output, .cell_output"
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_install.html">
-     如何安装Pytorch
+     如何安装PyTorch
     </a>
    </li>
    <li class="toctree-l2">
@@ -447,9 +457,18 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="python">
 <h1>Python 基础<a class="headerlink" href="#python" title="Permalink to this headline">#</a></h1>
-<p>Python本身的语法不复杂，直接看代码基本能看懂，所以这里不介绍。但是其实隐藏了很多坑，有空还是系统的看一下比较好，了解一下数据类型、控制语句、函数和类相关的东西。</p>
+<p>Python本身的语法不复杂，直接看代码基本能看懂，所以这里不过多介绍。但是其实隐藏了很多坑，有空还是系统的看一下比较好，了解一下数据类型、控制语句、函数和类相关的东西。</p>
 <p><a class="reference external" href="https://www.runoob.com/python/python-tutorial.html">菜鸟教程</a></p>
 <p><a class="reference external" href="https://docs.python.org/zh-cn/3/">官方文档</a></p>
+<p>相比于C++，Python的工作方式更接近于MATLAB，我们有以下几种方式运行Python。</p>
+<ul class="simple">
+<li><p>命令行交互式</p></li>
+<li><p>命令行执行</p></li>
+<li><p>Notebook中边编辑边执行</p></li>
+</ul>
+<p><img alt="命令行交互式" src="https://content.lz1.fun/202304110849594.png" /></p>
+<p><img alt="命令行执行" src="https://content.lz1.fun/202304110850640.png" /></p>
+<p><img alt="Notebook中边编辑边执行" src="https://content.lz1.fun/202304110851891.png" /></p>
 <section id="windows-linuxpython">
 <h2>在Windows/Linux上安装Python<a class="headerlink" href="#windows-linuxpython" title="Permalink to this headline">#</a></h2>
 <p>这里不建议大家直接安装Python，而建议安装Anaconda（这是一个打包了一些常用科学计算库，以及虚拟环境管理器的Python发行版）</p>
@@ -518,10 +537,10 @@ pip<span class="w"> </span>uninstall<span class="w"> </span>numpy<span class="w"
             <p class="prev-next-title">Python 入门</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="python_example.html" title="next page">
+    <a class='right-next' id="next-link" href="python_example1_numpy.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Python 例子</p>
+        <p class="prev-next-title">Python 例1: 基于NumPy的基本操作</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
