@@ -453,6 +453,11 @@ title="Print to PDF"
    网络结构
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   生成数据
+  </a>
+ </li>
 </ul>
 
     </nav>
@@ -477,6 +482,11 @@ title="Print to PDF"
    网络结构
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   生成数据
+  </a>
+ </li>
 </ul>
 
                         </nav>
@@ -493,10 +503,11 @@ title="Print to PDF"
 <p><a class="reference external" href="https://github.com/neuraloperator/neuraloperator">代码仓库</a></p>
 <section id="id1">
 <h2>网络结构<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
-<p><img alt="image.png" src="attachment:image.png" /></p>
+<p><img alt="" src="https://content.lz1.fun/202304112137340.png" /></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 </pre></div>
 </div>
 </div>
@@ -504,58 +515,194 @@ title="Print to PDF"
 <p>下面我们首先定义FNO中的单个block</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ################################################################</span>
+<span class="c1"># #  1d fourier layer</span>
+<span class="c1"># ################################################################</span>
+<span class="c1"># from functools import partial</span>
+<span class="c1"># import torch.nn.functional as F</span>
+<span class="c1"># def compl_mul1d(a, b):</span>
+<span class="c1">#     # (batch, in_channel, x ), (in_channel, out_channel, x) -&gt; (batch, out_channel, x)</span>
+<span class="c1">#     op = partial(torch.einsum, &quot;bix,iox-&gt;box&quot;)</span>
+<span class="c1">#     return torch.stack(</span>
+<span class="c1">#         [</span>
+<span class="c1">#             op(a[..., 0], b[..., 0]) - op(a[..., 1], b[..., 1]),</span>
+<span class="c1">#             op(a[..., 1], b[..., 0]) + op(a[..., 0], b[..., 1]),</span>
+<span class="c1">#         ],</span>
+<span class="c1">#         dim=-1,</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># class SpectralConv1d(nn.Module):</span>
+<span class="c1">#     def __init__(self, in_channels, out_channels, modes1):</span>
+<span class="c1">#         super(SpectralConv1d, self).__init__()</span>
+
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         1D Fourier layer. It does FFT, linear transform, and Inverse FFT.    </span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+
+<span class="c1">#         self.in_channels = in_channels</span>
+<span class="c1">#         self.out_channels = out_channels</span>
+<span class="c1">#         self.modes1 = (</span>
+<span class="c1">#             modes1  # Number of Fourier modes to multiply, at most floor(N/2) + 1</span>
+<span class="c1">#         )</span>
+
+<span class="c1">#         self.scale = 1 / (in_channels * out_channels)</span>
+<span class="c1">#         self.weights1 = nn.Parameter(</span>
+<span class="c1">#             self.scale * torch.rand(in_channels, out_channels, self.modes1, 2)</span>
+<span class="c1">#         )</span>
+
+<span class="c1">#     def forward(self, x):</span>
+<span class="c1">#         batchsize = x.shape[0]</span>
+<span class="c1">#         # Compute Fourier coeffcients up to factor of e^(- something constant)</span>
+<span class="c1">#         x_ft = torch.fft.rfft(x, dim=-1, norm=&quot;ortho&quot;)</span>
+<span class="c1">#         x_ft = torch.view_as_real(x_ft)</span>
+
+<span class="c1">#         # Multiply relevant Fourier modes</span>
+<span class="c1">#         out_ft = torch.zeros(</span>
+<span class="c1">#             batchsize, self.in_channels, x.size(-1) // 2 + 1, 2, device=x.device</span>
+<span class="c1">#         )</span>
+<span class="c1">#         # print(x_ft.shape,out_ft.shape)</span>
+<span class="c1">#         out_ft[:, :, : self.modes1] = compl_mul1d(</span>
+<span class="c1">#             x_ft[:, :, : self.modes1], self.weights1</span>
+<span class="c1">#         )</span>
+
+<span class="c1">#         # Return to physical space</span>
+<span class="c1">#         out_ft = torch.view_as_complex(out_ft)</span>
+<span class="c1">#         x = torch.fft.irfft(out_ft, dim=-1, n=x.size(-1), norm=&quot;ortho&quot;)</span>
+<span class="c1">#         return x</span>
+
+
+<span class="c1"># class SimpleBlock1d(nn.Module):</span>
+<span class="c1">#     def __init__(self, inchannel, outchannel, modes, width, padding_mode, activation):</span>
+<span class="c1">#         super(SimpleBlock1d, self).__init__()</span>
+
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         The overall network. It contains 4 layers of the Fourier layer.</span>
+<span class="c1">#         1. Lift the input to the desire channel dimension by self.fc0 .</span>
+<span class="c1">#         2. 4 layers of the integral operators u&#39; = (W + K)(u).</span>
+<span class="c1">#             W defined by self.w; K defined by self.conv .</span>
+<span class="c1">#         3. Project from the channel space to the output space by self.fc1 and self.fc2 .</span>
+        
+<span class="c1">#         input: the solution of the initial condition and location (a(x), x)</span>
+<span class="c1">#         input shape: (batchsize, x=s, c=2)</span>
+<span class="c1">#         output: the solution of a later timestep</span>
+<span class="c1">#         output shape: (batchsize, x=s, c=1)</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+
+<span class="c1">#         self.modes1 = modes</span>
+<span class="c1">#         self.width = width</span>
+<span class="c1">#         self.inchannel = inchannel</span>
+<span class="c1">#         self.outchannel = outchannel</span>
+<span class="c1">#         self.padding_mode = padding_mode</span>
+
+<span class="c1">#         self.fc0 = nn.Linear(</span>
+<span class="c1">#             self.inchannel, self.width</span>
+<span class="c1">#         )  # input channel is 2: (a(x), x)</span>
+
+<span class="c1">#         self.conv0 = SpectralConv1d(self.width, self.width, self.modes1)</span>
+<span class="c1">#         self.conv1 = SpectralConv1d(self.width, self.width, self.modes1)</span>
+<span class="c1">#         self.conv2 = SpectralConv1d(self.width, self.width, self.modes1)</span>
+<span class="c1">#         self.conv3 = SpectralConv1d(self.width, self.width, self.modes1)</span>
+<span class="c1">#         self.w0 = nn.Conv1d(self.width, self.width, 1)</span>
+<span class="c1">#         self.w1 = nn.Conv1d(self.width, self.width, 1)</span>
+<span class="c1">#         self.w2 = nn.Conv1d(self.width, self.width, 1)</span>
+<span class="c1">#         self.w3 = nn.Conv1d(self.width, self.width, 1)</span>
+
+<span class="c1">#         self.fc1 = nn.Linear(self.width, 128)</span>
+<span class="c1">#         self.fc2 = nn.Linear(128, self.outchannel)</span>
+
+<span class="c1">#         self.act=getattr(torch.nn, activation)()</span>
+
+<span class="c1">#     def forward(self, x):</span>
+
+<span class="c1">#         x = self.fc0(x)</span>
+<span class="c1">#         x = x.permute(0, 2, 1)</span>
+
+<span class="c1">#         x1 = self.conv0(x)</span>
+<span class="c1">#         x2 = self.w0(x)</span>
+<span class="c1">#         x = x1 + x2</span>
+<span class="c1">#         x = self.act(x)</span>
+
+<span class="c1">#         x1 = self.conv1(x)</span>
+<span class="c1">#         x2 = self.w1(x)</span>
+<span class="c1">#         x = x1 + x2</span>
+<span class="c1">#         x = self.act(x)</span>
+
+<span class="c1">#         x1 = self.conv2(x)</span>
+<span class="c1">#         x2 = self.w2(x)</span>
+<span class="c1">#         x = x1 + x2</span>
+<span class="c1">#         x = self.act(x)</span>
+
+<span class="c1">#         x1 = self.conv3(x)</span>
+<span class="c1">#         x2 = self.w3(x)</span>
+<span class="c1">#         x = x1 + x2</span>
+
+<span class="c1">#         x = x.permute(0, 2, 1)</span>
+<span class="c1">#         x = self.fc1(x)</span>
+<span class="c1">#         x = self.act(x)</span>
+<span class="c1">#         x = self.fc2(x)</span>
+<span class="c1">#         return x</span>
+
+
+<span class="c1"># class FNO1d(nn.Module):</span>
+<span class="c1">#     def __init__(</span>
+<span class="c1">#         self,</span>
+<span class="c1">#         in_channel=5,</span>
+<span class="c1">#         out_channel=1,</span>
+<span class="c1">#         modes=32,</span>
+<span class="c1">#         hidden=64,</span>
+<span class="c1">#         padding_mode=&quot;circular&quot;,</span>
+<span class="c1">#         activation=&quot;ReLU&quot;,</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         super(FNO1d, self).__init__()</span>
+<span class="c1">#         self.conv1 = SimpleBlock1d(</span>
+<span class="c1">#             in_channel,</span>
+<span class="c1">#             out_channel,</span>
+<span class="c1">#             modes,</span>
+<span class="c1">#             width=hidden,</span>
+<span class="c1">#             padding_mode=padding_mode,</span>
+<span class="c1">#             activation=activation,</span>
+<span class="c1">#         )</span>
+<span class="c1">#     def forward(self, x):</span>
+<span class="c1">#         x = self.conv1(x)</span>
+<span class="c1">#         return x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">################################################################</span>
 <span class="c1">#  1d fourier layer</span>
 <span class="c1">################################################################</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="k">def</span> <span class="nf">compl_mul1d</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="c1"># (batch, in_channel, x ), (in_channel, out_channel, x) -&gt; (batch, out_channel, x)</span>
-    <span class="n">op</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">,</span> <span class="s2">&quot;bix,iox-&gt;box&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">op</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">op</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
-            <span class="n">op</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">op</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
-        <span class="p">],</span>
-        <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-    <span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">SpectralConv1d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">modes1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">modes</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SpectralConv1d</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        1D Fourier layer. It does FFT, linear transform, and Inverse FFT.    </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_channels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">modes1</span>  <span class="c1"># Number of Fourier modes to multiply, at most floor(N/2) + 1</span>
-        <span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="n">modes</span>  <span class="c1"># Number of Fourier modes to multiply, at most floor(N/2) + 1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">in_channels</span> <span class="o">*</span> <span class="n">out_channels</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">batchsize</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
         <span class="c1"># Compute Fourier coeffcients up to factor of e^(- something constant)</span>
         <span class="n">x_ft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span>
-        <span class="n">x_ft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">x_ft</span><span class="p">)</span>
 
         <span class="c1"># Multiply relevant Fourier modes</span>
+        <span class="c1"># (batch, in_channel, x ), (in_channel, out_channel, x) -&gt; (batch, out_channel, x)</span>
         <span class="n">out_ft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-            <span class="n">batchsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span>
-        <span class="p">)</span>
-        <span class="c1"># print(x_ft.shape,out_ft.shape)</span>
-        <span class="n">out_ft</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">]</span> <span class="o">=</span> <span class="n">compl_mul1d</span><span class="p">(</span>
-            <span class="n">x_ft</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights1</span>
-        <span class="p">)</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span>
+        <span class="n">out_ft</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">]</span> <span class="o">=</span>  <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bix,iox-&gt;box&quot;</span><span class="p">,</span><span class="n">x_ft</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
 
         <span class="c1"># Return to physical space</span>
-        <span class="n">out_ft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">out_ft</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">out_ft</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
@@ -577,7 +724,7 @@ title="Print to PDF"
 <span class="sd">        output shape: (batchsize, x=s, c=1)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span> <span class="o">=</span> <span class="n">modes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="n">modes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inchannel</span> <span class="o">=</span> <span class="n">inchannel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">outchannel</span> <span class="o">=</span> <span class="n">outchannel</span>
@@ -587,10 +734,10 @@ title="Print to PDF"
             <span class="bp">self</span><span class="o">.</span><span class="n">inchannel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
         <span class="p">)</span>  <span class="c1"># input channel is 2: (a(x), x)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv0</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv0</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">SpectralConv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -658,6 +805,131 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">Net1</span><span class="o">=</span><span class="n">FNO1d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[[0.1410],
+         [0.1409],
+         [0.1409],
+         [0.1409],
+         [0.1410],
+         [0.1410],
+         [0.1410],
+         [0.1410],
+         [0.1410],
+         [0.1410],
+         [0.1410],
+         [0.1411],
+         [0.1411],
+         [0.1411],
+         [0.1411],
+         [0.1411],
+         [0.1412],
+         [0.1412],
+         [0.1412],
+         [0.1412],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1413],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1414],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1415],
+         [0.1416],
+         [0.1416],
+         [0.1416],
+         [0.1416],
+         [0.1416],
+         [0.1416],
+         [0.1417],
+         [0.1417],
+         [0.1417],
+         [0.1417],
+         [0.1417],
+         [0.1417],
+         [0.1417],
+         [0.1417],
+         [0.1418],
+         [0.1418],
+         [0.1418],
+         [0.1418],
+         [0.1418],
+         [0.1419],
+         [0.1419],
+         [0.1420],
+         [0.1420],
+         [0.1420],
+         [0.1421],
+         [0.1421],
+         [0.1421],
+         [0.1422],
+         [0.1422],
+         [0.1423],
+         [0.1423],
+         [0.1424],
+         [0.1424],
+         [0.1425],
+         [0.1426],
+         [0.1426],
+         [0.1427],
+         [0.1427],
+         [0.1428],
+         [0.1429]]], grad_fn=&lt;ViewBackward0&gt;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h2>生成数据<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>我们让FNO来拟合从</p>
 </section>
 </section>
 
