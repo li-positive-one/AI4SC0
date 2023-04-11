@@ -2,6 +2,8 @@
 
 AI for Science for beginners.
 
+[Project Homepage](https://lz1.fun/AI4SC0/intro.html)
+
 ## Usage
 
 ### Building the book
