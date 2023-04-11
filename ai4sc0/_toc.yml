@@ -22,6 +22,7 @@ parts:
   - file: neuralsolution
     sections:
     - file: pinn
+    - file: pinn-burgers
 - caption: 补充
   chapters:
   - file: material
