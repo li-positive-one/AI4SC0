@@ -579,7 +579,7 @@ title="Print to PDF"
 
 <span class="n">IV_x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 <span class="n">IV_t</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">IV_x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-<span class="n">IV_u</span><span class="o">=-</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">IV_x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">IV_u</span><span class="o">=-</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">IV_x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -708,12 +708,12 @@ title="Print to PDF"
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">initial_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">net</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
-    <span class="n">u_pred</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">u_pred</span><span class="o">=</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
     <span class="n">loss</span><span class="o">=</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">u_pred</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">loss</span>
     
 <span class="k">def</span> <span class="nf">boundary_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">net</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
-    <span class="n">u_pred</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">u_pred</span><span class="o">=</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
     <span class="n">loss</span><span class="o">=</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">u_pred</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">loss</span>
 </pre></div>
@@ -728,8 +728,7 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">Ansatz</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
-<span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span> <span class="p">[{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">},</span>
-                            <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">LC3</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">}])</span>
+<span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
 <span class="n">scheduler</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingWarmRestarts</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">epochs</span><span class="o">=</span><span class="mi">5000</span>
 <span class="n">loss_hist</span><span class="o">=</span><span class="p">[]</span>
@@ -752,11 +751,11 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1000:4.22e-02,5.91e-04,3.42e-02
-2000:3.40e-03,4.90e-05,4.08e-03
-3000:2.02e-03,3.07e-05,2.33e-03
-4000:1.53e-03,2.98e-05,1.90e-03
-5000:1.43e-03,2.91e-05,1.82e-03
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1000:4.22e-02,8.33e-05,3.07e-02
+2000:2.89e-03,2.88e-05,3.81e-03
+3000:1.28e-03,1.44e-05,2.06e-03
+4000:9.43e-04,1.18e-05,1.56e-03
+5000:8.86e-04,1.13e-05,1.47e-03
 </pre></div>
 </div>
 </div>
@@ -767,11 +766,15 @@ title="Print to PDF"
 <p>下面画出了t=0时的初值和网络预测值，以及t=1时的网络预测值。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">VA_x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IV_x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">IV_t</span><span class="o">=</span><span class="mf">0.0</span><span class="o">*</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">IV_x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">VA_x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 <span class="n">VA_t</span><span class="o">=</span><span class="mf">1.0</span><span class="o">*</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">IV_x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-    <span class="n">VA_pred</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">VA_x</span><span class="p">,</span><span class="n">VA_t</span><span class="p">)</span>
+    <span class="n">VA_pred</span><span class="o">=</span><span class="n">model</span><span class="p">(</span><span class="n">VA_x</span><span class="p">,</span><span class="n">VA_t</span><span class="p">)</span>
+    <span class="n">IV_pred</span><span class="o">=</span><span class="n">model</span><span class="p">(</span><span class="n">IV_x</span><span class="p">,</span><span class="n">IV_t</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">IV_u</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;ref t=0&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">IV_pred</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;pred t=0&#39;</span><span class="p">)</span>
@@ -781,7 +784,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f92bb1a5ca0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f7c2c3dc4c0&gt;
 </pre></div>
 </div>
 <img alt="_images/pinn-burgers_21_1.png" src="_images/pinn-burgers_21_1.png" />
