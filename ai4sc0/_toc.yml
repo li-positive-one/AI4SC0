@@ -10,19 +10,18 @@ parts:
     sections: 
     - file: python_basic
     - file: python_example1_numpy
-    - file: python_example2_torch
-    - file: python_example3_rte
+    - file: python_example2_vs_matlab
   - file: pytorch
     sections: 
     - file: pytorch_install
-    - file: pytorch_basic
-    - file: pytorch_solver
+    - file: pytorch_example1_numpy
+    - file: pytorch_example2_rte
+    - file: pytorch_example3_nn
   - file: neuraloperator
     sections:
     - file: fno
   - file: neuralsolution
     sections:
-    - file: pinn
     - file: pinn-burgers
 - caption: 补充
   chapters:
