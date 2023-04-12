@@ -17,6 +17,7 @@ parts:
     - file: pytorch_example1_numpy
     - file: pytorch_example2_rte
     - file: pytorch_example3_nn
+    - file: pytorch_struct
   - file: neuraloperator
     sections:
     - file: fno
@@ -26,3 +27,4 @@ parts:
 - caption: 补充
   chapters:
   - file: material
+  - file: lightning
