@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>PINN &#8212; AI4SC from Zero</title>
+    <title>Pytorch库的结构 &#8212; AI4SC from Zero</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,6 +52,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Neural Operator" href="neuraloperator.html" />
+    <link rel="prev" title="使用PyTorch训练神经网络" href="pytorch_example3_nn.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -116,7 +118,7 @@ const thebe_selector_output = ".output, .cell_output"
   教程
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="python.html">
    Python 入门
@@ -144,16 +146,16 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="pytorch.html">
    Pytorch 入门
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_install.html">
      如何安装PyTorch
@@ -174,8 +176,8 @@ const thebe_selector_output = ".output, .cell_output"
      使用PyTorch训练神经网络
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="pytorch_struct.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Pytorch库的结构
     </a>
    </li>
@@ -317,7 +319,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpinn.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpytorch_struct.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -345,7 +347,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/pinn.md"
+        <a href="_sources/pytorch_struct.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -394,7 +396,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>PINN</h1>
+                <h1>Pytorch库的结构</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -406,8 +408,38 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="pinn">
-<h1>PINN<a class="headerlink" href="#pinn" title="Permalink to this headline">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="pytorch">
+<h1>Pytorch库的结构<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h1>
+<ul class="simple">
+<li><p>基础：神经网络支持</p>
+<ul>
+<li><p>torch.nn 神经网络支持</p></li>
+<li><p>torch.functional 各种神经网络中常用的函数</p></li>
+<li><p>torch.optim 神经网络优化器</p></li>
+<li><p>torch.autograd 自动求导</p></li>
+<li><p>torch.utils.data 数据集</p></li>
+</ul>
+</li>
+<li><p>Numpy/Scipy</p>
+<ul>
+<li><p>torch.linalg</p></li>
+<li><p>torch.fft</p></li>
+<li><p>torch.special</p></li>
+<li><p>torch.sparse</p></li>
+</ul>
+</li>
+<li><p>函数式编程</p>
+<ul>
+<li><p>torch.func</p></li>
+</ul>
+</li>
+<li><p>分布式与加速</p>
+<ul>
+<li><p>torch.distributed</p></li>
+<li><p>torch.amp</p></li>
+</ul>
+</li>
+</ul>
 </section>
 
     <script type="text/x-thebe-config">
@@ -437,6 +469,20 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="pytorch_example3_nn.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">使用PyTorch训练神经网络</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="neuraloperator.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Neural Operator</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>
