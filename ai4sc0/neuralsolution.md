@@ -1,1 +1,4 @@
 # Neural Solution
+
+```{tableofcontents}
+```
