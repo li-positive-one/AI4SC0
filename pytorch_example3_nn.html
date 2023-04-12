@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Pytorch 入门 &#8212; AI4SC from Zero</title>
+    <title>使用PyTorch训练神经网络 &#8212; AI4SC from Zero</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,8 +52,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="如何安装PyTorch" href="pytorch_install.html" />
-    <link rel="prev" title="Python和Matlab的差异" href="python_example2_vs_matlab.html" />
+    <link rel="next" title="Neural Operator" href="neuraloperator.html" />
+    <link rel="prev" title="Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)" href="pytorch_example2_rte.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -147,7 +147,7 @@ const thebe_selector_output = ".output, .cell_output"
   </ul>
  </li>
  <li class="toctree-l1 current active has-children">
-  <a class="current reference internal" href="#">
+  <a class="reference internal" href="pytorch.html">
    Pytorch 入门
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
@@ -155,7 +155,7 @@ const thebe_selector_output = ".output, .cell_output"
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_install.html">
      如何安装PyTorch
@@ -171,8 +171,8 @@ const thebe_selector_output = ".output, .cell_output"
      Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="pytorch_example3_nn.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      使用PyTorch训练神经网络
     </a>
    </li>
@@ -275,6 +275,53 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/li-positive-one/AI4SC0/main?urlpath=tree/ai4sc0/pytorch_example3_nn.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://colab.research.google.com/github/li-positive-one/AI4SC0/blob/main/ai4sc0/pytorch_example3_nn.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_colab.png">
+  </span>
+<span class="headerbtn__text-container">Colab</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
 <button onclick="toggleFullScreen()"
   class="headerbtn"
   data-toggle="tooltip"
@@ -314,7 +361,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpytorch.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpytorch_example3_nn.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -342,7 +389,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/pytorch.md"
+        <a href="_sources/pytorch_example3_nn.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -353,7 +400,7 @@ title="Download source file"
 <span class="headerbtn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="headerbtn__text-container">.md</span>
+<span class="headerbtn__text-container">.ipynb</span>
 </a>
 
       </li>
@@ -379,23 +426,80 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   构建数据集
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   搭建网络
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   训练网络
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Pytorch 入门</h1>
+                <h1>使用PyTorch训练神经网络</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   构建数据集
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   搭建网络
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   训练网络
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -404,16 +508,32 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="pytorch">
-<h1>Pytorch 入门<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h1>
-<p>PyTorch最早是作为神经网络库开发的，但是随着逐渐发展，目前已经不仅限应用于神经网络方面，而是逐渐成为一个支持GPU加速与符号微分的张量计算库，可以作为Numpy的上位替代。</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="pytorch_install.html">如何安装PyTorch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pytorch_example1_numpy.html">Python 例2: 基于PyTorch的基本操作</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pytorch_example2_rte.html">Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pytorch_example3_nn.html">使用PyTorch训练神经网络</a></li>
-</ul>
+<h1>使用PyTorch训练神经网络<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h1>
+<p>我们将展示使用PyTorch搭建并训练一个神经网络的标准流程。</p>
+<p>最主要的流程是以下三个部分。</p>
+<ol class="simple">
+<li><p>构建数据集</p></li>
+<li><p>搭建网络</p></li>
+<li><p>训练网络</p></li>
+</ol>
+<p>不过，首先，我们要先import需要用到的包</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+</pre></div>
 </div>
+</div>
+</div>
+<section id="id1">
+<h2>构建数据集<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="id2">
+<h2>搭建网络<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="id3">
+<h2>训练网络<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -443,17 +563,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="python_example2_vs_matlab.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="pytorch_example2_rte.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Python和Matlab的差异</p>
+            <p class="prev-next-title">Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="pytorch_install.html" title="next page">
+    <a class='right-next' id="next-link" href="neuraloperator.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">如何安装PyTorch</p>
+        <p class="prev-next-title">Neural Operator</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

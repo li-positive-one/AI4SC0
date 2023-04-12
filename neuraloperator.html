@@ -50,10 +50,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fourier neural operator" href="fno.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="pytorch_solver.html" />
+    <link rel="prev" title="使用PyTorch训练神经网络" href="pytorch_example3_nn.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -140,13 +142,8 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python_example2_torch.html">
-     Python 例2: 基于PyTorch的基本操作
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="python_example3_rte.html">
-     Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
+    <a class="reference internal" href="python_example2_vs_matlab.html">
+     Python和Matlab的差异
     </a>
    </li>
   </ul>
@@ -167,8 +164,18 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="pytorch_basic.html">
-     Pytorch基础
+    <a class="reference internal" href="pytorch_example1_numpy.html">
+     Python 例2: 基于PyTorch的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example2_rte.html">
+     Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example3_nn.html">
+     使用PyTorch训练神经网络
     </a>
    </li>
   </ul>
@@ -200,11 +207,6 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="pinn.html">
-     PINN
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pinn-burgers.html">
      PINN for burgers equation
@@ -405,6 +407,22 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="neural-operator">
 <h1>Neural Operator<a class="headerlink" href="#neural-operator" title="Permalink to this headline">#</a></h1>
+<p>考虑
+$<span class="math notranslate nohighlight">\(
+\begin{equation}
+\begin{array}{ll}
+\mathcal{L} (u; \bm \eta)(\bm x)=0, &amp; \bm x \in \Omega
+\end{array}
+\end{equation}
+\)</span><span class="math notranslate nohighlight">\(
+这样的方程。我们称从参数(或者初边值)\)</span>\eta<span class="math notranslate nohighlight">\(到对应的解\)</span>u<span class="math notranslate nohighlight">\(的映射为解映射
+\)</span><span class="math notranslate nohighlight">\(
+\begin{equation}
+    \mathcal{S}: \eta \rightarrow u
+\end{equation}
+\)</span>$
+Neural Operator 方法就是用神经网络去参数化这样一个解映射，然后使用optimize的方法从数据中去学习这个解映射。所以这类方法一般都是监督学习，即需要带标签的数据。</p>
+<p>Neural Operator中使用的神经网络可以是任意网络，例如全连接网络、卷积神经网络，而FNO是效果最好的网络之一。</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -436,11 +454,11 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="pytorch_solver.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="pytorch_example3_nn.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">&lt;no title&gt;</p>
+            <p class="prev-next-title">使用PyTorch训练神经网络</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="fno.html" title="next page">

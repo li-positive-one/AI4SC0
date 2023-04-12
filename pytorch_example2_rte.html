@@ -52,8 +52,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Pytorch 入门" href="pytorch.html" />
-    <link rel="prev" title="Python 例2: 基于PyTorch的基本操作" href="python_example2_torch.html" />
+    <link rel="next" title="使用PyTorch训练神经网络" href="pytorch_example3_nn.html" />
+    <link rel="prev" title="Python 例2: 基于PyTorch的基本操作" href="pytorch_example1_numpy.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -119,16 +119,16 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="python.html">
    Python 入门
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="python_basic.html">
      Python 基础
@@ -140,7 +140,29 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python_example2_torch.html">
+    <a class="reference internal" href="python_example2_vs_matlab.html">
+     Python和Matlab的差异
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="pytorch.html">
+   Pytorch 入门
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_install.html">
+     如何安装PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example1_numpy.html">
      Python 例2: 基于PyTorch的基本操作
     </a>
    </li>
@@ -149,26 +171,9 @@ const thebe_selector_output = ".output, .cell_output"
      Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
     </a>
    </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="pytorch.html">
-   Pytorch 入门
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="pytorch_install.html">
-     如何安装PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="pytorch_basic.html">
-     Pytorch基础
+    <a class="reference internal" href="pytorch_example3_nn.html">
+     使用PyTorch训练神经网络
     </a>
    </li>
   </ul>
@@ -200,11 +205,6 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="pinn.html">
-     PINN
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pinn-burgers.html">
      PINN for burgers equation
@@ -283,7 +283,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/li-positive-one/AI4SC0/main?urlpath=tree/ai4sc0/python_example3_rte.ipynb"
+        <a href="https://mybinder.org/v2/gh/li-positive-one/AI4SC0/main?urlpath=tree/ai4sc0/pytorch_example2_rte.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -301,7 +301,7 @@ title="Launch on Binder"
       </li>
       
       <li>
-        <a href="https://colab.research.google.com/github/li-positive-one/AI4SC0/blob/main/ai4sc0/python_example3_rte.ipynb"
+        <a href="https://colab.research.google.com/github/li-positive-one/AI4SC0/blob/main/ai4sc0/pytorch_example2_rte.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -361,7 +361,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpython_example3_rte.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpytorch_example2_rte.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -389,7 +389,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/python_example3_rte.ipynb"
+        <a href="_sources/pytorch_example2_rte.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -1878,7 +1878,7 @@ title="Print to PDF"
  &lt;matplotlib.lines.Line2D at 0x7f5cd3417220&gt;]
 </pre></div>
 </div>
-<img alt="_images/python_example3_rte_12_1.png" src="_images/python_example3_rte_12_1.png" />
+<img alt="_images/pytorch_example2_rte_12_1.png" src="_images/pytorch_example2_rte_12_1.png" />
 </div>
 </div>
 </section>
@@ -1911,17 +1911,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="python_example2_torch.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="pytorch_example1_numpy.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
             <p class="prev-next-title">Python 例2: 基于PyTorch的基本操作</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="pytorch.html" title="next page">
+    <a class='right-next' id="next-link" href="pytorch_example3_nn.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Pytorch 入门</p>
+        <p class="prev-next-title">使用PyTorch训练神经网络</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Python 例2: 基于PyTorch的基本操作 &#8212; AI4SC from Zero</title>
+    <title>Python和Matlab的差异 &#8212; AI4SC from Zero</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,7 +52,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)" href="python_example3_rte.html" />
+    <link rel="next" title="Pytorch 入门" href="pytorch.html" />
     <link rel="prev" title="Python 例1: 基于NumPy的基本操作" href="python_example1_numpy.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -141,12 +141,7 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Python 例2: 基于PyTorch的基本操作
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="python_example3_rte.html">
-     Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
+     Python和Matlab的差异
     </a>
    </li>
   </ul>
@@ -167,8 +162,18 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="pytorch_basic.html">
-     Pytorch基础
+    <a class="reference internal" href="pytorch_example1_numpy.html">
+     Python 例2: 基于PyTorch的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example2_rte.html">
+     Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example3_nn.html">
+     使用PyTorch训练神经网络
     </a>
    </li>
   </ul>
@@ -200,11 +205,6 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="pinn.html">
-     PINN
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pinn-burgers.html">
      PINN for burgers equation
@@ -283,7 +283,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/li-positive-one/AI4SC0/main?urlpath=tree/ai4sc0/python_example2_torch.ipynb"
+        <a href="https://mybinder.org/v2/gh/li-positive-one/AI4SC0/main?urlpath=tree/ai4sc0/python_example2_vs_matlab.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -301,7 +301,7 @@ title="Launch on Binder"
       </li>
       
       <li>
-        <a href="https://colab.research.google.com/github/li-positive-one/AI4SC0/blob/main/ai4sc0/python_example2_torch.ipynb"
+        <a href="https://colab.research.google.com/github/li-positive-one/AI4SC0/blob/main/ai4sc0/python_example2_vs_matlab.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -361,7 +361,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpython_example2_torch.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpython_example2_vs_matlab.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -389,7 +389,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/python_example2_torch.ipynb"
+        <a href="_sources/python_example2_vs_matlab.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -449,18 +449,18 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#numpy">
-   使用Numpy操作张量
+  <a class="reference internal nav-link" href="#id1">
+   控制语句
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#scipy">
-   使用Scipy进行线性回归
+  <a class="reference internal nav-link" href="#id2">
+   创建变量
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#matplotlib">
-   使用Matplotlib画图
+  <a class="reference internal nav-link" href="#id3">
+   变量索引
   </a>
  </li>
 </ul>
@@ -472,7 +472,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Python 例2: 基于PyTorch的基本操作</h1>
+                <h1>Python和Matlab的差异</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -483,18 +483,18 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#numpy">
-   使用Numpy操作张量
+  <a class="reference internal nav-link" href="#id1">
+   控制语句
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#scipy">
-   使用Scipy进行线性回归
+  <a class="reference internal nav-link" href="#id2">
+   创建变量
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#matplotlib">
-   使用Matplotlib画图
+  <a class="reference internal nav-link" href="#id3">
+   变量索引
   </a>
  </li>
 </ul>
@@ -507,55 +507,85 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="python-2-pytorch">
-<h1>Python 例2: 基于PyTorch的基本操作<a class="headerlink" href="#python-2-pytorch" title="Permalink to this headline">#</a></h1>
-<p>这个例子和前一个例子几乎一样，唯一的不同在于我们将NumPy换成了PyTorch。因为PyTorch已经支持了NumPy的大部分功能，而且在CPU上进行计算时，速度并不慢于numpy，而且还支持可微分、可函数变换、可GPU加速等功能，所以大家写数值代码时完全可以直接基于Pytorch而非Numpy。</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="pythonmatlab">
+<h1>Python和Matlab的差异<a class="headerlink" href="#pythonmatlab" title="Permalink to this headline">#</a></h1>
+<p>这里列举了一些Python和Matlab的差异。Python在执行方式上接近于matlab，然而在Tensor的索引方式上会和C++一样。</p>
+<section id="id1">
+<h2>控制语句<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="numpy">
-<h2>使用Numpy操作张量<a class="headerlink" href="#numpy" title="Permalink to this headline">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">a</span><span class="o">=</span><span class="mi">2</span>
-<span class="n">b</span><span class="o">=</span><span class="mi">3</span>
-<span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">y</span><span class="o">=</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">noise</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="scipy">
-<h2>使用Scipy进行线性回归<a class="headerlink" href="#scipy" title="Permalink to this headline">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="matplotlib">
-<h2>使用Matplotlib画图<a class="headerlink" href="#matplotlib" title="Permalink to this headline">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">intercept</span><span class="o">+</span><span class="n">slope</span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;linear_fit.pdf&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="k">2</span>==0:
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;even:</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;odd:</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/python_example2_torch_7_0.png" src="_images/python_example2_torch_7_0.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>even:0
+odd:1
+even:2
+odd:3
+even:4
+odd:5
+even:6
+odd:7
+even:8
+odd:9
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h2>创建变量<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">N</span><span class="o">=</span><span class="mi">25</span>
+<span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+<span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>变量索引<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vector B:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<span class="n">B</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;matrix B:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;matrix B part:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>vector B:
+ [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+ 24]
+matrix B:
+ [[ 0  1  2  3  4]
+ [ 5  6  7  8  9]
+ [10 11 12 13 14]
+ [15 16 17 18 19]
+ [20 21 22 23 24]]
+matrix B part:
+ [[ 6  7  8]
+ [11 12 13]
+ [16 17 18]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## 张量合并</span>
+</pre></div>
+</div>
 </div>
 </div>
 </section>
@@ -570,16 +600,16 @@ title="Print to PDF"
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "pytorch20"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "pytorch20",
+            kernelName: "python3",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'pytorch20'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -595,10 +625,10 @@ title="Print to PDF"
             <p class="prev-next-title">Python 例1: 基于NumPy的基本操作</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="python_example3_rte.html" title="next page">
+    <a class='right-next' id="next-link" href="pytorch.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Python 例3: 使用PyTorch求解RTE(和Matlab代码对比)</p>
+        <p class="prev-next-title">Pytorch 入门</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
