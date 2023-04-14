@@ -50,6 +50,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="PINN for burgers equation" href="pinn-burgers.html" />
@@ -389,12 +391,46 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dgm-pinn">
+   DGM/PINN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deep-ritz">
+   Deep Ritz
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   其他
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -406,6 +442,29 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dgm-pinn">
+   DGM/PINN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deep-ritz">
+   Deep Ritz
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   其他
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -415,11 +474,131 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="neural-solution">
 <h1>Neural Solution<a class="headerlink" href="#neural-solution" title="Permalink to this headline">#</a></h1>
+<p>Neural solution是使用神经网络做为解的拟设，与之相对应的是使用分片常数、线性或者多项式作为解的拟设。然后，可以基于方程的强形式的残差，或者弱形式、变分形式等，得到优化问题，从而优化神经网络中的参数。</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pinn-burgers.html">PINN for burgers equation</a></li>
 </ul>
 </div>
+<section id="dgm-pinn">
+<h2>DGM/PINN<a class="headerlink" href="#dgm-pinn" title="Permalink to this headline">#</a></h2>
+<p>DGM<span id="id1">[<a class="reference internal" href="#id10" title="Justin Sirignano and Konstantinos Spiliopoulos. Dgm: a deep learning algorithm for solving partial differential equations. Journal of computational physics, 375:1339–1364, 2018.">SS18</a>]</span>和PINN<span id="id2">[<a class="reference internal" href="#id11" title="Maziar Raissi, Paris Perdikaris, and George E Karniadakis. Physics-informed neural networks: a deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational physics, 378:686–707, 2019.">RPK19</a>]</span>都是基于方程的残差实现的。考虑</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{array}{ll}
+\partial_{t} u(t, x)+\mathcal{L} {u}(t, x)=0, &amp; ({t}, {x}) \in[0, {~T}] \times \Omega \\
+{u}(0, { x})={u}_0({ x}), &amp; { x} \in \Omega \\
+{u}({t}, { x})={g}({t}, { x}), &amp; { x} \in[0, {~T}] \times \partial \Omega
+\end{array}
+\end{equation}
+\end{split}\]</div>
+<p>We first design a neural network as a fitting for the solution of this PDE, i.e., <span class="math notranslate nohighlight">\(u_{\theta}(t,x)\)</span>, where <span class="math notranslate nohighlight">\(\theta\)</span> represents the trainable parameters of this neural network.</p>
+<p>Then we randomly select a set of points within the interior of the computational region, as well as the region corresponding to the initial value condition and the region of the boundary boundary condition, respectively, i.e.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{aligned}
+P_1&amp;=\{x_i,t_i\}_{i=1}^{N_1} \in [0, {~T}] \times \Omega\\
+P_2&amp;=\{x_j,t_j\}_{j=1}^{N_2} \in [0, 0] \times \Omega\\
+P_3&amp;=\{x_k,t_k\}_{k=1}^{N_3} \in  [0, {~T}] \times \partial \Omega
+\end{aligned}
+\end{equation}
+\end{split}\]</div>
+<p>Then we define the loss function</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{aligned}
+L(\theta,P_1,P_2,P_3)&amp;=\sum_{(x,t)\in P_1}(u_{\theta}(t, x)-Lu(t,x))^2\\
+&amp;+\sum_{(x,t)\in P_2} (u_{\theta}(0, x)-u_0(x))^2\\
+&amp;+\sum_{(x,t)\in P_3} (u_{\theta}(t, x)-g(t,x))^2
+\end{aligned}
+\end{equation}
+\end{split}\]</div>
+<p>It is easy to see that this loss function is actually an  approximation of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{aligned}
+L(\theta)&amp;=\int_{(x,t)\in P_1}(u_{\theta}(t, x)-Lu(t,x))^2 dx dt\\
+&amp;+\int_{(x,t)\in P_2} (u_{\theta}(0, x)-u_0(x))^2 dx dt\\
+&amp;+\int_{(x,t)\in P_3} (u_{\theta}(t, x)-g(t,x))^2 dx dt
+\end{aligned}
+\end{equation}
+\end{split}\]</div>
+<p>obtained using Monte Carlo.</p>
+</section>
+<section id="deep-ritz">
+<h2>Deep Ritz<a class="headerlink" href="#deep-ritz" title="Permalink to this headline">#</a></h2>
+<p>In Deep ritz<span id="id3">[<a class="reference internal" href="#id12" title="Bing Yu and others. The deep ritz method: a deep learning-based numerical algorithm for solving variational problems. Communications in Mathematics and Statistics, 6(1):1–12, 2018.">Y+18</a>]</span>, the problem is a variational form of the equation, and we take the Poisson equation as an example to briefly introduce the process</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{aligned}
+-\Delta u(x)&amp;=f(x)\quad &amp;x &amp;\in  \Omega\\
+u(x)&amp;=0 \quad &amp;x &amp;\in \partial \Omega  
+\end{aligned}
+\end{equation}
+\end{split}\]</div>
+<p>Then we consider the variational form of this equation</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+I(u)=\int_{\Omega}\left(\frac{1}{2}|\nabla u(x)|^2-f(x) u(x)\right) d x
+\end{equation}
+\]</div>
+<p>Similarly, we use a neural network as an ansatz for the solution of this PDE and randomly select</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{aligned}
+P_1&amp;=\{x_i,t_i\}_{i=1}^{N_1} \in \Omega\\
+P_2&amp;=\{x_j,t_j\}_{k=1}^{N_2} \in \partial \Omega
+\end{aligned}
+\end{equation}
+\end{split}\]</div>
+<p>Then construct the loss function that</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+I(u)=\int_{\Omega}\left(\frac{1}{2}\left|\nabla_x u(x)\right|^2-f(x) u(x)\right) d x+\beta \int_{\partial \Omega} u(x)^2 d s
+\end{equation}
+\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+\begin{aligned}
+L(\theta,P_1,P_2)&amp;=\sum_{x \in P_1} \left(\frac{1}{2}\left|\nabla_x u(x)\right|^2-f(x) u(x)\right)  \\
+&amp;+\sum_{x\in P_2} (u_{\theta}( x))^2
+\end{aligned}
+\end{equation}
+\end{split}\]</div>
+<p>This is followed by the same process of minimizing the loss function using the optimizer.</p>
+</section>
+<section id="id4">
+<h2>其他<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>除了使用残差或者变分形式解方程，将Neural Solution的思路和张量分解、幂法等传统方法结合，还可以做出很多有意思的工作，如<span id="id5">[<a class="reference internal" href="#id13" title="Yifan Wang, Pengzhan Jin, and Hehu Xie. Tensor neural network and its numerical integration. arXiv preprint arXiv:2207.02754, 2022.">WJX22</a>]</span>,<span id="id6">[<a class="reference internal" href="#id14" title="Qihong Yang, Yangtao Deng, Yu Yang, Qiaolin He, and Shiquan Zhang. Power method, inverse power method and shifted inverse power method neural networks for solving eigenvalue problems of linear operators. arXiv preprint arXiv:2209.11134, 2022.">YDY+22</a>]</span>等。</p>
+<div class="docutils container" id="id7">
+<dl class="citation">
+<dt class="label" id="id11"><span class="brackets"><a class="fn-backref" href="#id2">RPK19</a></span></dt>
+<dd><p>Maziar Raissi, Paris Perdikaris, and George E Karniadakis. Physics-informed neural networks: a deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational physics</em>, 378:686–707, 2019.</p>
+</dd>
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id1">SS18</a></span></dt>
+<dd><p>Justin Sirignano and Konstantinos Spiliopoulos. Dgm: a deep learning algorithm for solving partial differential equations. <em>Journal of computational physics</em>, 375:1339–1364, 2018.</p>
+</dd>
+<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id5">WJX22</a></span></dt>
+<dd><p>Yifan Wang, Pengzhan Jin, and Hehu Xie. Tensor neural network and its numerical integration. <em>arXiv preprint arXiv:2207.02754</em>, 2022.</p>
+</dd>
+<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id6">YDY+22</a></span></dt>
+<dd><p>Qihong Yang, Yangtao Deng, Yu Yang, Qiaolin He, and Shiquan Zhang. Power method, inverse power method and shifted inverse power method neural networks for solving eigenvalue problems of linear operators. <em>arXiv preprint arXiv:2209.11134</em>, 2022.</p>
+</dd>
+<dt class="label" id="id12"><span class="brackets"><a class="fn-backref" href="#id3">Y+18</a></span></dt>
+<dd><p>Bing Yu and others. The deep ritz method: a deep learning-based numerical algorithm for solving variational problems. <em>Communications in Mathematics and Statistics</em>, 6(1):1–12, 2018.</p>
+</dd>
+</dl>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
