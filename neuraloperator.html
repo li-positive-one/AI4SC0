@@ -55,7 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fourier neural operator" href="fno.html" />
-    <link rel="prev" title="Pytorch库的结构" href="pytorch_struct.html" />
+    <link rel="prev" title="Pytorch的函数变换" href="pytorch_func.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -181,6 +181,11 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_struct.html">
      Pytorch库的结构
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_func.html">
+     Pytorch的函数变换
     </a>
    </li>
   </ul>
@@ -427,7 +432,7 @@ $<span class="math notranslate nohighlight">\(
 \end{equation}
 \)</span>$
 Neural Operator 方法就是用神经网络去参数化这样一个解映射，然后使用optimize的方法从数据中去学习这个解映射。所以这类方法一般都是监督学习，即需要带标签的数据。</p>
-<p>Neural Operator中使用的神经网络可以是任意网络，例如全连接网络、卷积神经网络，而FNO是效果最好的网络之一。</p>
+<p>Neural Operator中使用的神经网络可以是任意网络，例如全连接网络、卷积神经网络，而Fourier Neural Operator<span id="id1">[<a class="reference internal" href="markdown.html#id9" title="Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, and Anima Anandkumar. Fourier neural operator for parametric partial differential equations. arXiv preprint arXiv:2010.08895, 2020.">LKA+20</a>]</span>是其中效果最好的网络之一。除了FNO，比较有名的此类方法还有DeepONet<span id="id2">[<a class="reference internal" href="markdown.html#id8" title="Lu Lu, Pengzhan Jin, and George Em Karniadakis. Deeponet: learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators. arXiv preprint arXiv:1910.03193, 2019.">LJK19</a>]</span>.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="fno.html">Fourier neural operator</a></li>
@@ -462,11 +467,11 @@ Neural Operator 方法就是用神经网络去参数化这样一个解映射，�
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="pytorch_struct.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="pytorch_func.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Pytorch库的结构</p>
+            <p class="prev-next-title">Pytorch的函数变换</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="fno.html" title="next page">
