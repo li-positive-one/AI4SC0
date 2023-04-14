@@ -421,7 +421,7 @@ title="Print to PDF"
 $<span class="math notranslate nohighlight">\(
 \begin{equation}
 \begin{array}{ll}
-\mathcal{L} (u; \eta)(\bm x)=0, &amp; x \in \Omega
+\mathcal{L} (u; \eta)(x)=0, &amp; x \in \Omega
 \end{array}
 \end{equation}
 \)</span><span class="math notranslate nohighlight">\(
@@ -432,11 +432,24 @@ $<span class="math notranslate nohighlight">\(
 \end{equation}
 \)</span>$
 Neural Operator 方法就是用神经网络去参数化这样一个解映射，然后使用optimize的方法从数据中去学习这个解映射。所以这类方法一般都是监督学习，即需要带标签的数据。</p>
-<p>Neural Operator中使用的神经网络可以是任意网络，例如全连接网络、卷积神经网络，而Fourier Neural Operator<span id="id1">[<a class="reference internal" href="markdown.html#id9" title="Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, and Anima Anandkumar. Fourier neural operator for parametric partial differential equations. arXiv preprint arXiv:2010.08895, 2020.">LKA+20</a>]</span>是其中效果最好的网络之一。除了FNO，比较有名的此类方法还有DeepONet<span id="id2">[<a class="reference internal" href="markdown.html#id8" title="Lu Lu, Pengzhan Jin, and George Em Karniadakis. Deeponet: learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators. arXiv preprint arXiv:1910.03193, 2019.">LJK19</a>]</span>.</p>
+<p>Neural Operator中使用的神经网络可以是任意网络，例如全连接网络、卷积神经网络，而Fourier Neural Operator<span id="id1">[<a class="reference internal" href="#id10" title="Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, and Anima Anandkumar. Fourier neural operator for parametric partial differential equations. arXiv preprint arXiv:2010.08895, 2020.">1</a>]</span>是其中效果最好的网络之一。除了FNO，比较有名的此类方法还有DeepONet<span id="id2">[<a class="reference internal" href="#id9" title="Lu Lu, Pengzhan Jin, and George Em Karniadakis. Deeponet: learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators. arXiv preprint arXiv:1910.03193, 2019.">2</a>]</span>.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="fno.html">Fourier neural operator</a></li>
 </ul>
+</div>
+<div class="docutils container" id="id3">
+<dl class="citation">
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, and Anima Anandkumar. Fourier neural operator for parametric partial differential equations. <em>arXiv preprint arXiv:2010.08895</em>, 2020.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Lu Lu, Pengzhan Jin, and George Em Karniadakis. Deeponet: learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators. <em>arXiv preprint arXiv:1910.03193</em>, 2019.</p>
+</dd>
+<dt class="label" id="id4"><span class="brackets">3</span></dt>
+<dd><p>Christopher Ramsay Holdgraf, Wendy de Heer, Brian N. Pasley, and Robert T. Knight. Evidence for Predictive Coding in Human Auditory Cortex. In <em>International Conference on Cognitive Neuroscience</em>. Brisbane, Australia, Australia, 2014. Frontiers in Neuroscience.</p>
+</dd>
+</dl>
 </div>
 </section>
 
