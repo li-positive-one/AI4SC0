@@ -178,12 +178,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_struct.html">
-     Pytorch库的结构
+     PyTorch库的结构
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_func.html">
-     Pytorch的函数变换
+     PyTorch的函数变换
     </a>
    </li>
   </ul>
@@ -229,6 +229,11 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="usingAI.html">
+   使用Chatgpt获取代码草稿
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="material.html">
    补充资料
@@ -474,14 +479,14 @@ title="Print to PDF"
 <h1>如何安装PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h1>
 <section id="nvidia">
 <h2>安装Nvidia显卡驱动(可选)<a class="headerlink" href="#nvidia" title="Permalink to this headline">#</a></h2>
-<p>对于带有nvidia显卡的机器，为了能让pytorch支持CUDA加速，我们需要安装显卡的驱动程序。</p>
+<p>对于带有nvidia显卡的机器，为了能让PyTorch支持CUDA加速，我们需要安装显卡的驱动程序。</p>
 <p><a class="reference external" href="https://www.nvidia.com/download/index.aspx">驱动下载页面</a></p>
 <p>驱动安装完成后，我们可以通过nvidia-smi命令来查看显卡状态。</p>
 <p><img alt="" src="https://content.lz1.fun/202304110840378.png" /></p>
 </section>
 <section id="id1">
 <h2>创建虚拟环境<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
-<p>因为我们有时候需要运行不同版本的pytorch，所以我们不直接安装pytorch，而先创建虚拟环境，将pytorch安装到虚拟环境中。</p>
+<p>因为我们有时候需要运行不同版本的PyTorch，所以我们不直接安装PyTorch，而先创建虚拟环境，将PyTorch安装到虚拟环境中。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pytorch20<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
 conda<span class="w"> </span>activate<span class="w"> </span>pytorch20
 </pre></div>
@@ -490,7 +495,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>pytorch20
 <section id="id2">
 <h2>安装Pytorch<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
 <p><a class="reference external" href="https://pytorch.org/get-started/locally/">PyTorch安装指引</a></p>
-<p>Pytorch的安装非常简单，而且也集成了相应CUDA库的安装，我们只需要选择相应的计算平台，使用pip或conda命令进行安装即可。(不建议混用conda或者pip，即在创建好环境后，如果用pip安装pytorch，之后的均一直用pip；否则一直用conda.)</p>
+<p>Pytorch的安装非常简单，而且也集成了相应CUDA库的安装，我们只需要选择相应的计算平台，使用pip或conda命令进行安装即可。(不建议混用conda或者pip，即在创建好环境后，如果用pip安装PyTorch，之后的均一直用pip；否则一直用conda.)</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="c1"># Linux, pip, GPU</span>
 pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w"> </span><span class="c1"># Linux, pip, CPU</span>
 conda<span class="w"> </span>install<span class="w"> </span>pytorch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>pytorch-cuda<span class="o">=</span><span class="m">11</span>.7<span class="w"> </span>-c<span class="w"> </span>pytorch<span class="w"> </span>-c<span class="w"> </span>nvidia<span class="w"> </span><span class="c1"># Linux, conda, GPU</span>

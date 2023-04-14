@@ -178,12 +178,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_struct.html">
-     Pytorch库的结构
+     PyTorch库的结构
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="pytorch_func.html">
-     Pytorch的函数变换
+     PyTorch的函数变换
     </a>
    </li>
   </ul>
@@ -229,6 +229,11 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="usingAI.html">
+   使用Chatgpt获取代码草稿
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="material.html">
    补充资料
@@ -465,7 +470,12 @@ title="Print to PDF"
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id2">
-   生成数据
+   训练网络
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   可视化结果
   </a>
  </li>
 </ul>
@@ -494,7 +504,12 @@ title="Print to PDF"
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id2">
-   生成数据
+   训练网络
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   可视化结果
   </a>
  </li>
 </ul>
@@ -518,175 +533,18 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>下面我们首先定义FNO中的单个block</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ################################################################</span>
-<span class="c1"># #  1d fourier layer</span>
-<span class="c1"># ################################################################</span>
-<span class="c1"># from functools import partial</span>
-<span class="c1"># import torch.nn.functional as F</span>
-<span class="c1"># def compl_mul1d(a, b):</span>
-<span class="c1">#     # (batch, in_channel, x ), (in_channel, out_channel, x) -&gt; (batch, out_channel, x)</span>
-<span class="c1">#     op = partial(torch.einsum, &quot;bix,iox-&gt;box&quot;)</span>
-<span class="c1">#     return torch.stack(</span>
-<span class="c1">#         [</span>
-<span class="c1">#             op(a[..., 0], b[..., 0]) - op(a[..., 1], b[..., 1]),</span>
-<span class="c1">#             op(a[..., 1], b[..., 0]) + op(a[..., 0], b[..., 1]),</span>
-<span class="c1">#         ],</span>
-<span class="c1">#         dim=-1,</span>
-<span class="c1">#     )</span>
-
-<span class="c1"># class SpectralConv1d(nn.Module):</span>
-<span class="c1">#     def __init__(self, in_channels, out_channels, modes1):</span>
-<span class="c1">#         super(SpectralConv1d, self).__init__()</span>
-
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         1D Fourier layer. It does FFT, linear transform, and Inverse FFT.    </span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         self.in_channels = in_channels</span>
-<span class="c1">#         self.out_channels = out_channels</span>
-<span class="c1">#         self.modes1 = (</span>
-<span class="c1">#             modes1  # Number of Fourier modes to multiply, at most floor(N/2) + 1</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         self.scale = 1 / (in_channels * out_channels)</span>
-<span class="c1">#         self.weights1 = nn.Parameter(</span>
-<span class="c1">#             self.scale * torch.rand(in_channels, out_channels, self.modes1, 2)</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#     def forward(self, x):</span>
-<span class="c1">#         batchsize = x.shape[0]</span>
-<span class="c1">#         # Compute Fourier coeffcients up to factor of e^(- something constant)</span>
-<span class="c1">#         x_ft = torch.fft.rfft(x, dim=-1, norm=&quot;ortho&quot;)</span>
-<span class="c1">#         x_ft = torch.view_as_real(x_ft)</span>
-
-<span class="c1">#         # Multiply relevant Fourier modes</span>
-<span class="c1">#         out_ft = torch.zeros(</span>
-<span class="c1">#             batchsize, self.in_channels, x.size(-1) // 2 + 1, 2, device=x.device</span>
-<span class="c1">#         )</span>
-<span class="c1">#         # print(x_ft.shape,out_ft.shape)</span>
-<span class="c1">#         out_ft[:, :, : self.modes1] = compl_mul1d(</span>
-<span class="c1">#             x_ft[:, :, : self.modes1], self.weights1</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         # Return to physical space</span>
-<span class="c1">#         out_ft = torch.view_as_complex(out_ft)</span>
-<span class="c1">#         x = torch.fft.irfft(out_ft, dim=-1, n=x.size(-1), norm=&quot;ortho&quot;)</span>
-<span class="c1">#         return x</span>
-
-
-<span class="c1"># class SimpleBlock1d(nn.Module):</span>
-<span class="c1">#     def __init__(self, inchannel, outchannel, modes, width, padding_mode, activation):</span>
-<span class="c1">#         super(SimpleBlock1d, self).__init__()</span>
-
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         The overall network. It contains 4 layers of the Fourier layer.</span>
-<span class="c1">#         1. Lift the input to the desire channel dimension by self.fc0 .</span>
-<span class="c1">#         2. 4 layers of the integral operators u&#39; = (W + K)(u).</span>
-<span class="c1">#             W defined by self.w; K defined by self.conv .</span>
-<span class="c1">#         3. Project from the channel space to the output space by self.fc1 and self.fc2 .</span>
-        
-<span class="c1">#         input: the solution of the initial condition and location (a(x), x)</span>
-<span class="c1">#         input shape: (batchsize, x=s, c=2)</span>
-<span class="c1">#         output: the solution of a later timestep</span>
-<span class="c1">#         output shape: (batchsize, x=s, c=1)</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         self.modes1 = modes</span>
-<span class="c1">#         self.width = width</span>
-<span class="c1">#         self.inchannel = inchannel</span>
-<span class="c1">#         self.outchannel = outchannel</span>
-<span class="c1">#         self.padding_mode = padding_mode</span>
-
-<span class="c1">#         self.fc0 = nn.Linear(</span>
-<span class="c1">#             self.inchannel, self.width</span>
-<span class="c1">#         )  # input channel is 2: (a(x), x)</span>
-
-<span class="c1">#         self.conv0 = SpectralConv1d(self.width, self.width, self.modes1)</span>
-<span class="c1">#         self.conv1 = SpectralConv1d(self.width, self.width, self.modes1)</span>
-<span class="c1">#         self.conv2 = SpectralConv1d(self.width, self.width, self.modes1)</span>
-<span class="c1">#         self.conv3 = SpectralConv1d(self.width, self.width, self.modes1)</span>
-<span class="c1">#         self.w0 = nn.Conv1d(self.width, self.width, 1)</span>
-<span class="c1">#         self.w1 = nn.Conv1d(self.width, self.width, 1)</span>
-<span class="c1">#         self.w2 = nn.Conv1d(self.width, self.width, 1)</span>
-<span class="c1">#         self.w3 = nn.Conv1d(self.width, self.width, 1)</span>
-
-<span class="c1">#         self.fc1 = nn.Linear(self.width, 128)</span>
-<span class="c1">#         self.fc2 = nn.Linear(128, self.outchannel)</span>
-
-<span class="c1">#         self.act=getattr(torch.nn, activation)()</span>
-
-<span class="c1">#     def forward(self, x):</span>
-
-<span class="c1">#         x = self.fc0(x)</span>
-<span class="c1">#         x = x.permute(0, 2, 1)</span>
-
-<span class="c1">#         x1 = self.conv0(x)</span>
-<span class="c1">#         x2 = self.w0(x)</span>
-<span class="c1">#         x = x1 + x2</span>
-<span class="c1">#         x = self.act(x)</span>
-
-<span class="c1">#         x1 = self.conv1(x)</span>
-<span class="c1">#         x2 = self.w1(x)</span>
-<span class="c1">#         x = x1 + x2</span>
-<span class="c1">#         x = self.act(x)</span>
-
-<span class="c1">#         x1 = self.conv2(x)</span>
-<span class="c1">#         x2 = self.w2(x)</span>
-<span class="c1">#         x = x1 + x2</span>
-<span class="c1">#         x = self.act(x)</span>
-
-<span class="c1">#         x1 = self.conv3(x)</span>
-<span class="c1">#         x2 = self.w3(x)</span>
-<span class="c1">#         x = x1 + x2</span>
-
-<span class="c1">#         x = x.permute(0, 2, 1)</span>
-<span class="c1">#         x = self.fc1(x)</span>
-<span class="c1">#         x = self.act(x)</span>
-<span class="c1">#         x = self.fc2(x)</span>
-<span class="c1">#         return x</span>
-
-
-<span class="c1"># class FNO1d(nn.Module):</span>
-<span class="c1">#     def __init__(</span>
-<span class="c1">#         self,</span>
-<span class="c1">#         in_channel=5,</span>
-<span class="c1">#         out_channel=1,</span>
-<span class="c1">#         modes=32,</span>
-<span class="c1">#         hidden=64,</span>
-<span class="c1">#         padding_mode=&quot;circular&quot;,</span>
-<span class="c1">#         activation=&quot;ReLU&quot;,</span>
-<span class="c1">#     ):</span>
-<span class="c1">#         super(FNO1d, self).__init__()</span>
-<span class="c1">#         self.conv1 = SimpleBlock1d(</span>
-<span class="c1">#             in_channel,</span>
-<span class="c1">#             out_channel,</span>
-<span class="c1">#             modes,</span>
-<span class="c1">#             width=hidden,</span>
-<span class="c1">#             padding_mode=padding_mode,</span>
-<span class="c1">#             activation=activation,</span>
-<span class="c1">#         )</span>
-<span class="c1">#     def forward(self, x):</span>
-<span class="c1">#         x = self.conv1(x)</span>
-<span class="c1">#         return x</span>
-</pre></div>
-</div>
-</div>
-</div>
+<p>下面我们首先定义FNO中的单个block，也就是上图中的黄框部分</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">################################################################</span>
 <span class="c1">#  1d fourier layer</span>
 <span class="c1">################################################################</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-
 <span class="k">class</span> <span class="nc">SpectralConv1d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">modes</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SpectralConv1d</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -702,7 +560,6 @@ title="Print to PDF"
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        
         <span class="c1"># Compute Fourier coeffcients up to factor of e^(- something constant)</span>
         <span class="n">x_ft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span>
 
@@ -715,9 +572,14 @@ title="Print to PDF"
         <span class="c1"># Return to physical space</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">out_ft</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
-
-
-<span class="k">class</span> <span class="nc">SimpleBlock1d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>然后一个完成FNO的一个block，这有若干个Fourier卷积和普通卷积组合而成。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SimpleBlock1d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inchannel</span><span class="p">,</span> <span class="n">outchannel</span><span class="p">,</span> <span class="n">modes</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">padding_mode</span><span class="p">,</span> <span class="n">activation</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SimpleBlock1d</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -787,9 +649,14 @@ title="Print to PDF"
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
-
-
-<span class="k">class</span> <span class="nc">FNO1d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>最后，一个FNO由若干个FNO块组成，我们这里选取最简单的由单块组成的网络。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FNO1d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channel</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
@@ -815,131 +682,195 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+<p>至此，我们已经完成了FNO网络结构的定义。下面就是找一些数据来测试FNO的效果。我们使用之前写好的RTE求解器生成100组数据。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">torch.func</span> <span class="kn">import</span> <span class="n">vmap</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 
-<span class="n">Net1</span><span class="o">=</span><span class="n">FNO1d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_gauss_point</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">legendre</span><span class="o">.</span><span class="n">leggauss</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">()),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">())</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># spatial grid</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">L</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+
+<span class="n">Tini</span> <span class="o">=</span>  <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cas</span><span class="p">:(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">cas</span><span class="o">%</span><span class="k">2</span>) +torch.sin(cas)))*(1+torch.sin(cas)))(torch.arange(100))
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cas</span><span class="p">:(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">cas</span><span class="o">%</span><span class="k">2</span>)  +torch.sin(cas+1)))*(1+torch.sin(cas)))(torch.arange(100))
+    
+<span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">Tini</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
+    <span class="n">CFL</span> <span class="o">=</span> <span class="mf">0.8</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">CFL</span> <span class="o">*</span> <span class="n">dx</span>  <span class="c1"># time step</span>
+    <span class="n">dtc</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">c</span>
+    <span class="n">ddtc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">dtc</span>
+
+    <span class="n">datarecord_sigma</span><span class="o">=</span><span class="n">sigma</span><span class="o">.</span><span class="n">clone</span><span class="p">()[</span><span class="kc">None</span><span class="p">,:]</span>
+    
+    <span class="c1"># velocity grid &amp; angle</span>
+    <span class="n">Nvx</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">mu</span><span class="p">,</span> <span class="n">wmu</span> <span class="o">=</span> <span class="n">get_gauss_point</span><span class="p">(</span><span class="n">Nvx</span><span class="p">)</span>
+
+    <span class="c1"># distribution function</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">Tini</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">Tini</span><span class="o">**</span><span class="mi">4</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">Nvx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">I</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;circular&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">I0</span> <span class="o">=</span> <span class="n">wmu</span> <span class="o">@</span> <span class="n">I</span>  <span class="c1"># energe</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">Nvx</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">t</span><span class="o">=</span><span class="mf">1.0</span>
+    <span class="n">Nt</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="n">list_T</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">list_E</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nt</span><span class="p">):</span>  <span class="c1">#=1: 1/dt</span>
+        <span class="n">I_out</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">T_out</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">I0_out</span> <span class="o">=</span> <span class="n">I0</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">index_add1</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">index_sub1</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># streaming, positive vx</span>
+        <span class="n">lv</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">Nvx</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">coe</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[</span><span class="n">lv</span><span class="p">]</span>
+        <span class="n">I</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">coe</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index_sub1</span><span class="p">])</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">T_out</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">Nvx</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">])</span>
+        
+        <span class="c1"># streaming, negative vx</span>
+        <span class="n">lv</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nvx</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">coe</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[</span><span class="n">lv</span><span class="p">]</span>
+        <span class="n">I</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">coe</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index_add1</span><span class="p">]</span> <span class="o">-</span> <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">])</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">T_out</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">Nvx</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">I_out</span><span class="p">[</span><span class="n">lv</span><span class="p">,</span> <span class="n">index</span><span class="p">])</span>
+
+        <span class="n">I</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">I</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;circular&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">T_out</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">cv</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">I0_out</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">T_out</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">I0</span> <span class="o">=</span> <span class="n">wmu</span> <span class="o">@</span> <span class="n">I</span>
+
+        <span class="k">if</span> <span class="n">loop</span><span class="o">%</span><span class="k">10</span>==0:
+            <span class="n">list_E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I0</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
+            <span class="n">list_T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
+    <span class="n">datarecord_E</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">list_E</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">datarecord_T</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">list_T</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">datarecord_E</span><span class="p">,</span><span class="n">datarecord_T</span><span class="p">,</span><span class="n">datarecord_sigma</span>
+
+<span class="n">E</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">vmap</span><span class="p">(</span><span class="n">solve</span><span class="p">)(</span><span class="n">Tini</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[[0.1410],
-         [0.1409],
-         [0.1409],
-         [0.1409],
-         [0.1410],
-         [0.1410],
-         [0.1410],
-         [0.1410],
-         [0.1410],
-         [0.1410],
-         [0.1410],
-         [0.1411],
-         [0.1411],
-         [0.1411],
-         [0.1411],
-         [0.1411],
-         [0.1412],
-         [0.1412],
-         [0.1412],
-         [0.1412],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1413],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1414],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1415],
-         [0.1416],
-         [0.1416],
-         [0.1416],
-         [0.1416],
-         [0.1416],
-         [0.1416],
-         [0.1417],
-         [0.1417],
-         [0.1417],
-         [0.1417],
-         [0.1417],
-         [0.1417],
-         [0.1417],
-         [0.1417],
-         [0.1418],
-         [0.1418],
-         [0.1418],
-         [0.1418],
-         [0.1418],
-         [0.1419],
-         [0.1419],
-         [0.1420],
-         [0.1420],
-         [0.1420],
-         [0.1421],
-         [0.1421],
-         [0.1421],
-         [0.1422],
-         [0.1422],
-         [0.1423],
-         [0.1423],
-         [0.1424],
-         [0.1424],
-         [0.1425],
-         [0.1426],
-         [0.1426],
-         [0.1427],
-         [0.1427],
-         [0.1428],
-         [0.1429]]], grad_fn=&lt;ViewBackward0&gt;)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([100, 50, 400]) torch.Size([100, 50, 400]) torch.Size([100, 1, 400])
+</pre></div>
+</div>
+</div>
+</div>
+<p>然后我们将其包装成数据集，我们令输入是0时刻的E,T以及参数sigma，输出的是结束时刻的E和T.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_data</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">E</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">T</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">sigma</span><span class="o">.</span><span class="n">expand_as</span><span class="p">(</span><span class="n">E</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]],</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y_data</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">E</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">T</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x_data</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">y_data</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="o">=</span><span class="n">x_data</span><span class="p">[:</span><span class="mi">80</span><span class="p">],</span><span class="n">y_data</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span>
+<span class="n">x_valid</span><span class="p">,</span><span class="n">y_valid</span><span class="o">=</span><span class="n">x_data</span><span class="p">[</span><span class="mi">80</span><span class="p">:],</span><span class="n">y_data</span><span class="p">[</span><span class="mi">80</span><span class="p">:]</span>
+
+<span class="n">train_dataset</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">valid_dataset</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span><span class="n">y_valid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x_data.shape=torch.Size([100, 400, 3]),y_data.shape=torch.Size([100, 400, 2])
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="id2">
-<h2>生成数据<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
-<p>我们让FNO来拟合从</p>
+<h2>训练网络<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">valid_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">myFNO</span><span class="o">=</span><span class="n">FNO1d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">myFNO</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">myFNO</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingWarmRestarts</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">epochs</span><span class="o">=</span><span class="mi">300</span>
+
+<span class="n">train_loss_hist</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">valid_loss_hist</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="n">train_loss</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">train_dataloader</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span><span class="n">y</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="n">y_pred</span><span class="o">=</span><span class="n">myFNO</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">=</span><span class="p">(</span><span class="n">y_pred</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">train_loss</span><span class="o">+=</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">train_loss_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="o">/</span><span class="mi">80</span><span class="p">)</span>   
+    <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    
+    <span class="n">valid_loss</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">valid_dataloader</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span><span class="n">y</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="n">y_pred</span><span class="o">=</span><span class="n">myFNO</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">=</span><span class="p">(</span><span class="n">y_pred</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">valid_loss</span><span class="o">+=</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">valid_loss_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valid_loss</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>  
+        
+    <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="k">10</span>==0:
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epoch:</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">, train loss: </span><span class="si">{</span><span class="n">train_loss</span><span class="si">}</span><span class="s2">, valid loss: </span><span class="si">{</span><span class="n">valid_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">train_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">valid_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">myFNO</span><span class="o">=</span><span class="n">FNO1d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>可视化结果<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">y_pred</span><span class="o">=</span><span class="n">myFNO</span><span class="p">(</span><span class="n">x_valid</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_pred</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
