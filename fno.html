@@ -682,7 +682,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>至此，我们已经完成了FNO网络结构的定义。下面就是找一些数据来测试FNO的效果。我们使用之前写好的RTE求解器生成100组数据。</p>
+<p>至此，我们已经完成了FNO网络结构的定义。下面就是找一些数据来测试FNO的效果。我们使用之前写好的RTE求解器生成500组数据。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
@@ -705,8 +705,8 @@ title="Print to PDF"
 <span class="n">dx</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">N</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">L</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
 
-<span class="n">Tini</span> <span class="o">=</span>  <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cas</span><span class="p">:(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">cas</span><span class="o">%</span><span class="k">2</span>) +torch.sin(cas)))*(1+torch.sin(cas)))(torch.arange(100))
-<span class="n">sigma</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cas</span><span class="p">:(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">cas</span><span class="o">%</span><span class="k">2</span>)  +torch.sin(cas+1)))*(1+torch.sin(cas)))(torch.arange(100))
+<span class="n">Tini</span> <span class="o">=</span>  <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cas</span><span class="p">:(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">cas</span><span class="o">%</span><span class="k">2</span>) +torch.sin(cas)))*(1+torch.sin(cas)))(torch.arange(500))
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cas</span><span class="p">:(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">cas</span><span class="o">%</span><span class="k">2</span>)  +torch.sin(cas+1)))*(1+torch.sin(cas)))(torch.arange(500))
     
 <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">Tini</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
     <span class="n">CFL</span> <span class="o">=</span> <span class="mf">0.8</span>
@@ -772,20 +772,23 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([100, 50, 400]) torch.Size([100, 50, 400]) torch.Size([100, 1, 400])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([500, 50, 400]) torch.Size([500, 50, 400]) torch.Size([500, 1, 400])
 </pre></div>
 </div>
 </div>
 </div>
-<p>然后我们将其包装成数据集，我们令输入是0时刻的E,T以及参数sigma，输出的是结束时刻的E和T.</p>
+<p>然后我们将其包装成数据集，我们令输入是0时刻的E,T以及参数sigma，输出的是最后时刻的E和T. 我们这里对数据进行标准化。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_data</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">E</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">T</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">sigma</span><span class="o">.</span><span class="n">expand_as</span><span class="p">(</span><span class="n">E</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]],</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">y_data</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">E</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">T</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">x_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_data</span><span class="o">-</span><span class="n">x_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">/</span><span class="n">x_data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">y_data</span><span class="o">=</span><span class="p">(</span><span class="n">y_data</span><span class="o">-</span><span class="n">y_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">/</span><span class="n">y_data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x_data</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">y_data</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="o">=</span><span class="n">x_data</span><span class="p">[:</span><span class="mi">80</span><span class="p">],</span><span class="n">y_data</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span>
-<span class="n">x_valid</span><span class="p">,</span><span class="n">y_valid</span><span class="o">=</span><span class="n">x_data</span><span class="p">[</span><span class="mi">80</span><span class="p">:],</span><span class="n">y_data</span><span class="p">[</span><span class="mi">80</span><span class="p">:]</span>
+<span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="o">=</span><span class="n">x_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">],</span><span class="n">y_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
+<span class="n">x_valid</span><span class="p">,</span><span class="n">y_valid</span><span class="o">=</span><span class="n">x_data</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:],</span><span class="n">y_data</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
 
 <span class="n">train_dataset</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
 <span class="n">valid_dataset</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span><span class="n">y_valid</span><span class="p">)</span>
@@ -793,7 +796,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x_data.shape=torch.Size([100, 400, 3]),y_data.shape=torch.Size([100, 400, 2])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x_data.shape=torch.Size([500, 400, 3]),y_data.shape=torch.Size([500, 400, 2])
 </pre></div>
 </div>
 </div>
@@ -807,7 +810,7 @@ title="Print to PDF"
 <span class="n">valid_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">myFNO</span><span class="o">=</span><span class="n">FNO1d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">myFNO</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="c1">#myFNO.cuda()</span>
 <span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">myFNO</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
 <span class="n">scheduler</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingWarmRestarts</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">epochs</span><span class="o">=</span><span class="mi">300</span>
@@ -817,19 +820,19 @@ title="Print to PDF"
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">epochs</span><span class="p">):</span>
     <span class="n">train_loss</span><span class="o">=</span><span class="mi">0</span>
     <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">train_dataloader</span><span class="p">:</span>
-        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span><span class="n">y</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="c1">#x,y=x.cuda(),y.cuda()</span>
         <span class="n">y_pred</span><span class="o">=</span><span class="n">myFNO</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">loss</span><span class="o">=</span><span class="p">(</span><span class="n">y_pred</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
         <span class="n">train_loss</span><span class="o">+=</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-    <span class="n">train_loss_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="o">/</span><span class="mi">80</span><span class="p">)</span>   
+    <span class="n">train_loss_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="o">/</span><span class="mi">480</span><span class="p">)</span>   
     <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
     
     <span class="n">valid_loss</span><span class="o">=</span><span class="mi">0</span>
     <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">valid_dataloader</span><span class="p">:</span>
-        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span><span class="n">y</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="c1">#x,y=x.cuda(),y.cuda()</span>
         <span class="n">y_pred</span><span class="o">=</span><span class="n">myFNO</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">loss</span><span class="o">=</span><span class="p">(</span><span class="n">y_pred</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
         <span class="n">valid_loss</span><span class="o">+=</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
@@ -844,14 +847,36 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">train_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">valid_dataloader</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_dataset</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">myFNO</span><span class="o">=</span><span class="n">FNO1d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch:10, train loss: 0.003175586462020874, valid loss: 0.00037672792677767575
+epoch:20, train loss: 0.0002588716615719022, valid loss: 3.065231430809945e-05
+epoch:30, train loss: 9.93086869129911e-05, valid loss: 1.1333598195051309e-05
+epoch:40, train loss: 5.538810160032881e-05, valid loss: 6.490697160188574e-06
+epoch:50, train loss: 2.024030345637584e-05, valid loss: 2.717382585615269e-06
+epoch:60, train loss: 1.244708732883737e-05, valid loss: 1.421161186954123e-06
+epoch:70, train loss: 9.589616411176394e-06, valid loss: 1.1114556173197343e-06
+epoch:80, train loss: 8.339804935530992e-06, valid loss: 9.134378728958836e-07
+epoch:90, train loss: 8.066567716014106e-06, valid loss: 8.570763725401775e-07
+epoch:100, train loss: 7.9013756248969e-06, valid loss: 8.48483011850476e-07
+epoch:110, train loss: 3.975824483859469e-05, valid loss: 2.010224670812022e-05
+epoch:120, train loss: 0.00029864934731449466, valid loss: 7.92315840953961e-05
+epoch:130, train loss: 0.00010102950159307511, valid loss: 1.3228697753220331e-05
+epoch:140, train loss: 1.3250306039935822e-05, valid loss: 1.4218400110621587e-06
+epoch:150, train loss: 7.340786112308706e-06, valid loss: 6.053697916286183e-07
+epoch:160, train loss: 1.137120779048928e-05, valid loss: 5.193124366087432e-07
+epoch:170, train loss: 3.7670119468202756e-06, valid loss: 5.149904040990805e-07
+epoch:180, train loss: 2.3749674085138395e-06, valid loss: 3.525242675550544e-07
+epoch:190, train loss: 2.419967600530981e-06, valid loss: 3.263542396325647e-07
+epoch:200, train loss: 1.7950417401380037e-06, valid loss: 2.044468772055552e-07
+epoch:210, train loss: 1.4594621120522788e-06, valid loss: 1.6817412529235298e-07
+epoch:220, train loss: 1.4386312159331283e-06, valid loss: 1.286770867636733e-07
+epoch:230, train loss: 1.3689481193068787e-06, valid loss: 1.538402614187362e-07
+epoch:240, train loss: 1.2285119623811624e-06, valid loss: 1.2656184367187961e-07
+epoch:250, train loss: 1.176968879690321e-06, valid loss: 1.2355535261576733e-07
+epoch:260, train loss: 1.1003755133742743e-06, valid loss: 1.0413278772603007e-07
+epoch:270, train loss: 1.1253409724076846e-06, valid loss: 9.877408047032077e-08
+epoch:280, train loss: 1.0549202897891519e-06, valid loss: 1.047883415594697e-07
+epoch:290, train loss: 1.034728200011159e-06, valid loss: 9.921025423409446e-08
+epoch:300, train loss: 1.0490981381394704e-06, valid loss: 9.879754259145557e-08
 </pre></div>
 </div>
 </div>
@@ -865,10 +890,16 @@ title="Print to PDF"
 
 <span class="n">y_pred</span><span class="o">=</span><span class="n">myFNO</span><span class="p">(</span><span class="n">x_valid</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_pred</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_pred</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f2744212d40&gt;]
+</pre></div>
+</div>
+<img alt="_images/fno_15_1.png" src="_images/fno_15_1.png" />
 </div>
 </div>
 </section>
