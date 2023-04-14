@@ -2,7 +2,7 @@
 
 ## 安装Nvidia显卡驱动(可选)
 
-对于带有nvidia显卡的机器，为了能让pytorch支持CUDA加速，我们需要安装显卡的驱动程序。
+对于带有nvidia显卡的机器，为了能让PyTorch支持CUDA加速，我们需要安装显卡的驱动程序。
 
 [驱动下载页面](https://www.nvidia.com/download/index.aspx)
 
@@ -13,7 +13,7 @@
 
 ## 创建虚拟环境
 
-因为我们有时候需要运行不同版本的pytorch，所以我们不直接安装pytorch，而先创建虚拟环境，将pytorch安装到虚拟环境中。
+因为我们有时候需要运行不同版本的PyTorch，所以我们不直接安装PyTorch，而先创建虚拟环境，将PyTorch安装到虚拟环境中。
 
 ```bash
 conda create -n pytorch20 python=3.9
@@ -24,7 +24,7 @@ conda activate pytorch20
 
 [PyTorch安装指引](https://pytorch.org/get-started/locally/)
 
-Pytorch的安装非常简单，而且也集成了相应CUDA库的安装，我们只需要选择相应的计算平台，使用pip或conda命令进行安装即可。(不建议混用conda或者pip，即在创建好环境后，如果用pip安装pytorch，之后的均一直用pip；否则一直用conda.)
+Pytorch的安装非常简单，而且也集成了相应CUDA库的安装，我们只需要选择相应的计算平台，使用pip或conda命令进行安装即可。(不建议混用conda或者pip，即在创建好环境后，如果用pip安装PyTorch，之后的均一直用pip；否则一直用conda.)
 
 
 ```bash

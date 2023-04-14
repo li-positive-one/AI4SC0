@@ -1,4 +1,4 @@
-# Pytorch库的结构
+# PyTorch库的结构
 
 - 基础：神经网络支持
     - torch.nn 神经网络支持

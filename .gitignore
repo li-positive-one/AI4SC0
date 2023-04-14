@@ -3,3 +3,4 @@ ai4sc0/_build/
 .ipynb_checkpoints
 *.pt
 ai4sc0/*.txt
+*.npz
