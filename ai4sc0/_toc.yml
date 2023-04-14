@@ -18,6 +18,7 @@ parts:
     - file: pytorch_example2_rte
     - file: pytorch_example3_nn
     - file: pytorch_struct
+    - file: pytorch_func
   - file: neuraloperator
     sections:
     - file: fno
