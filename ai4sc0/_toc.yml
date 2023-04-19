@@ -28,3 +28,4 @@ parts:
 - caption: 补充
   chapters:
   - file: material
+  - file: para
