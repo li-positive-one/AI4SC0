@@ -398,12 +398,38 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-pytorch">
+   Why PyTorch?
+  </a>
+  <ul class="nav section-nav flex-column">
+  </ul>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -415,6 +441,21 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-pytorch">
+   Why PyTorch?
+  </a>
+  <ul class="nav section-nav flex-column">
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -426,6 +467,10 @@ title="Print to PDF"
 <h1>Welcome to AI 4 SC from Zero<a class="headerlink" href="#welcome-to-ai-4-sc-from-zero" title="Permalink to this headline">#</a></h1>
 <p>这是为了三小时PyTorch基础知识讲座准备的，适用于完全没有机器学习实操经验的同学。</p>
 <p>课程的主要内容是想结合一些AI4SC的经典工作，给大家普及PyTorch的使用。</p>
+<section id="why-pytorch">
+<h2>Why PyTorch?<a class="headerlink" href="#why-pytorch" title="Permalink to this headline">#</a></h2>
+<p><img alt="" src="https://content.lz1.fun/2023/04/19/0c2f981c589102672ce8d7e7c4a5a4e1-1dc0c9.png" /></p>
+<p><img alt="" src="https://content.lz1.fun/2023/04/19/ae24802634d1a4c5cc7aa18291b8add7-b46d4e.png" /></p>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">教程</span></p>
 <ul>
@@ -462,6 +507,7 @@ title="Print to PDF"
 <li class="toctree-l1"><a class="reference internal" href="material.html">补充资料</a></li>
 </ul>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
