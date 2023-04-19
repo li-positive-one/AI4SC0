@@ -2,7 +2,7 @@
 
 Python本身的语法不复杂，直接看代码基本能看懂，所以这里不过多介绍。但是其实隐藏了很多坑，有空还是系统的看一下比较好，了解一下数据类型、控制语句、函数和类相关的东西。
 
-[菜鸟教程](https://www.runoob.com/python/python-tutorial.html)
+[官方教程](https://docs.python.org/zh-cn/3/tutorial/index.html)
 
 [官方文档](https://docs.python.org/zh-cn/3/)
 
@@ -56,3 +56,19 @@ pip uninstall numpy          # 删除 numpy 包
 
 ## Python虚拟环境管理
 
+Python应用程序通常会使用不在标准库内的软件包和模块。应用程序有时需要特定版本的库，因为应用程序可能需要修复特定的错误，或者可以使用库的过时版本的接口编写应用程序。
+
+这意味着一个Python安装可能无法满足每个应用程序的要求。如果应用程序A需要特定模块的1.0版本但应用程序B需要2.0版本，则需求存在冲突，安装版本1.0或2.0将导致某一个应用程序无法运行。
+
+这个问题的解决方案是创建一个 virtual environment，其中安装有特定Python版本，以及许多其他包。
+
+Python内置了虚拟环境解决方案[venv](https://docs.python.org/zh-cn/3/tutorial/venv.html)。
+同时conda也支持虚拟环境管理，我们下边以conda为例介绍一下。
+
+```
+conda create -n myenv python=3.9 numpy
+conda info --envs
+source activate myenv
+conda install scipy
+source deactivate
+```
