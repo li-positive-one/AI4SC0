@@ -27,5 +27,5 @@ parts:
     - file: pinn-burgers
 - caption: 补充
   chapters:
-  - file: material
   - file: para
+  - file: material
