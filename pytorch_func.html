@@ -482,6 +482,11 @@ title="Print to PDF"
    </li>
   </ul>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#more">
+   More
+  </a>
+ </li>
 </ul>
 
     </nav>
@@ -517,6 +522,11 @@ title="Print to PDF"
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#more">
+   More
+  </a>
  </li>
 </ul>
 
@@ -866,6 +876,12 @@ ddy_dxx.shape=torch.Size([1000, 3, 2, 2]),ddy_dxx2.shape=torch.Size([1000, 3, 2,
 <div><p>To implement hessian, we could have used jacfwd(jacrev(f)) or jacrev(jacfwd(f)) or any other composition of the two. But forward-over-reverse is typically the most efficient. That’s because in the inner Jacobian computation we’re often differentiating a function wide Jacobian (maybe like a loss function 𝑓:ℝⁿ→ℝ), while in the outer Jacobian computation we’re differentiating a function with a square Jacobian (since ∇𝑓:ℝⁿ→ℝⁿ), which is where forward-mode wins out.</p>
 </div></blockquote>
 </section>
+</section>
+<section id="more">
+<h2>More<a class="headerlink" href="#more" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html">https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html</a></p>
+<p><a class="reference external" href="https://pytorch.org/tutorials/intermediate/per_sample_grads.html">https://pytorch.org/tutorials/intermediate/per_sample_grads.html</a></p>
+<p><a class="reference external" href="https://pytorch.org/tutorials/intermediate/jacobians_hessians.html">https://pytorch.org/tutorials/intermediate/jacobians_hessians.html</a></p>
 </section>
 </section>
 
