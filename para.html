@@ -487,6 +487,11 @@ title="Print to PDF"
        ZeRO-Offload
       </a>
      </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-infinity">
+       ZeRO-Infinity
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -497,17 +502,19 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id7">
+  <a class="reference internal nav-link" href="#id10">
    张量并行
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#megatron-lm">
+     Megatron-LM
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#megatron-lm">
-   Megatron-LM
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id8">
+  <a class="reference internal nav-link" href="#id12">
    流水线并行
   </a>
   <ul class="nav section-nav flex-column">
@@ -516,15 +523,20 @@ title="Print to PDF"
      PyTorch: Pipeline (GPipe)
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepspeed-pipeline-pipedream">
+     DeepSpeed: Pipeline (PipeDream)
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id9">
+  <a class="reference internal nav-link" href="#id15">
    如何选择并行策略
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id10">
+  <a class="reference internal nav-link" href="#id16">
    显存优化技巧
   </a>
  </li>
@@ -619,6 +631,11 @@ title="Print to PDF"
        ZeRO-Offload
       </a>
      </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-infinity">
+       ZeRO-Infinity
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -629,17 +646,19 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id7">
+  <a class="reference internal nav-link" href="#id10">
    张量并行
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#megatron-lm">
+     Megatron-LM
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#megatron-lm">
-   Megatron-LM
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id8">
+  <a class="reference internal nav-link" href="#id12">
    流水线并行
   </a>
   <ul class="nav section-nav flex-column">
@@ -648,15 +667,20 @@ title="Print to PDF"
      PyTorch: Pipeline (GPipe)
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepspeed-pipeline-pipedream">
+     DeepSpeed: Pipeline (PipeDream)
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id9">
+  <a class="reference internal nav-link" href="#id15">
    如何选择并行策略
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id10">
+  <a class="reference internal nav-link" href="#id16">
    显存优化技巧
   </a>
  </li>
@@ -748,59 +772,111 @@ title="Print to PDF"
 </ul>
 </li>
 </ul>
-<p>[<a class="reference external" href="https://arxiv.org/abs/1910.02054">1910.02054] </a><a class="reference external" href="https://arxiv.org/abs/1910.02054">ZeRO</a><a class="reference external" href="https://arxiv.org/abs/1910.02054">: Memory Optimizations Toward Training Trillion Parameter Models (arxiv.org)</a></p>
-<p>[<a class="reference external" href="https://arxiv.org/abs/2101.06840">2101.06840] </a><a class="reference external" href="https://arxiv.org/abs/2101.06840">ZeRO</a><a class="reference external" href="https://arxiv.org/abs/2101.06840">-Offload: Democratizing Billion-Scale Model Training (arxiv.org)</a></p>
-<p>[<a class="reference external" href="https://arxiv.org/abs/2104.07857">2104.07857] </a><a class="reference external" href="https://arxiv.org/abs/2104.07857">ZeRO</a><a class="reference external" href="https://arxiv.org/abs/2104.07857">-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning (arxiv.org)</a></p>
+<p>Zero是由一系列论文<span id="id7">[<a class="reference internal" href="#id26" title="Samyam Rajbhandari, Jeff Rasley, Olatunji Ruwase, and Yuxiong He. Zero: memory optimizations toward training trillion parameter models. In SC20: International Conference for High Performance Computing, Networking, Storage and Analysis, 1–16. IEEE, 2020.">RRRH20</a>]</span>，<span id="id8">[<a class="reference internal" href="#id27" title="Jie Ren, Samyam Rajbhandari, Reza Yazdani Aminabadi, Olatunji Ruwase, Shuangyan Yang, Minjia Zhang, Dong Li, and Yuxiong He. Zero-offload: democratizing billion-scale model training. In USENIX Annual Technical Conference, 551–564. 2021.">RRA+21</a>]</span>，<span id="id9">[<a class="reference internal" href="#id28" title="Samyam Rajbhandari, Olatunji Ruwase, Jeff Rasley, Shaden Smith, and Yuxiong He. Zero-infinity: breaking the gpu memory wall for extreme scale deep learning. In Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 1–14. 2021.">RRR+21</a>]</span>构成的工作。</p>
+<p><img alt="image-20230419100934516" src="https://content.lz1.fun/2023/04/19/2f9529dec0b2d5671310ad1701bf9f6c-a137bb.png" /></p>
 <section id="zero-dp-stage1-optimizer-state-partitioning">
 <h4>ZeRO-DP Stage1 : Optimizer State Partitioning<a class="headerlink" href="#zero-dp-stage1-optimizer-state-partitioning" title="Permalink to this headline">#</a></h4>
+<p><img alt="image-20230419100945385" src="https://content.lz1.fun/2023/04/19/83efbb1d198d0cb97c477d7719f10124-995aca.png" /></p>
 </section>
 <section id="zero-dp-stage2-gradient-partitioning">
 <h4>ZeRO-DP Stage2 : Gradient Partitioning<a class="headerlink" href="#zero-dp-stage2-gradient-partitioning" title="Permalink to this headline">#</a></h4>
+<p><img alt="image-20230419100952229" src="https://content.lz1.fun/2023/04/19/6d44636600baa7bebd7baf50f567f61e-04724d.png" /></p>
 </section>
 <section id="zero-dp-stage3-parameter-partitioning">
 <h4>ZeRO-DP Stage3 : Parameter Partitioning<a class="headerlink" href="#zero-dp-stage3-parameter-partitioning" title="Permalink to this headline">#</a></h4>
+<p><img alt="image-20230419100958591" src="https://content.lz1.fun/2023/04/19/6d44636600baa7bebd7baf50f567f61e-bdb33f.png" /></p>
 </section>
 <section id="zero-r">
 <h4>ZeRO-R<a class="headerlink" href="#zero-r" title="Permalink to this headline">#</a></h4>
+<ul class="simple">
+<li><p>Partitioned Activation Checkpointing</p></li>
+<li><p>Constant Size Buffers</p></li>
+<li><p>Memory Defragmentation</p></li>
+</ul>
 </section>
 <section id="communication-analysis-of-zero-dp">
 <h4>Communication Analysis of ZeRO-DP<a class="headerlink" href="#communication-analysis-of-zero-dp" title="Permalink to this headline">#</a></h4>
+<p><img alt="image-20230419101022362" src="https://content.lz1.fun/2023/04/19/56423b415af042598d5291da82d98063-f31ba6.png" /></p>
 </section>
 <section id="zero-offload">
 <h4>ZeRO-Offload<a class="headerlink" href="#zero-offload" title="Permalink to this headline">#</a></h4>
+<p><img alt="image-20230419101032576" src="https://content.lz1.fun/2023/04/19/79b41e2843578b487af68bd3faf5e8be-fc29f4.png" /></p>
+<p><img alt="image-20230419101053604" src="https://content.lz1.fun/2023/04/19/aaed3cc364fa223a13bc636657ea6e75-80450e.png" /></p>
+</section>
+<section id="zero-infinity">
+<h4>ZeRO-Infinity<a class="headerlink" href="#zero-infinity" title="Permalink to this headline">#</a></h4>
+<p><img alt="image-20230419101144696" src="https://content.lz1.fun/2023/04/19/07ab8cb7b963d61378f7f4760f939240-f3fb1f.png" /></p>
+<p><img alt="image-20230419101153362" src="https://content.lz1.fun/2023/04/19/4598fbadc4e2fb92101f5e6b28249d96-f9eff4.png" /></p>
 </section>
 </section>
 <section id="pytorch-fullyshardeddataparallel">
 <h3>PyTorch: FullyShardedDataParallel<a class="headerlink" href="#pytorch-fullyshardeddataparallel" title="Permalink to this headline">#</a></h3>
+<p><img alt="image-20230419101215691" src="https://content.lz1.fun/2023/04/19/997e8b68e11cd5e54b93ed748ce4260a-cfedd0.png" /></p>
 <p><img alt="image-20230419093749565" src="https://content.lz1.fun/2023/04/19/1c87aded2b7ee0b1a750346c50f73a7d-20a20a.png" /></p>
 </section>
 </section>
-<section id="id7">
-<h2>张量并行<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
-</section>
+<section id="id10">
+<h2>张量并行<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
 <section id="megatron-lm">
-<h2>Megatron-LM<a class="headerlink" href="#megatron-lm" title="Permalink to this headline">#</a></h2>
+<h3>Megatron-LM<a class="headerlink" href="#megatron-lm" title="Permalink to this headline">#</a></h3>
+<p><span id="id11">[<a class="reference internal" href="#id31" title="Mohammad Shoeybi, Mostofa Patwary, Raul Puri, Patrick LeGresley, Jared Casper, and Bryan Catanzaro. Megatron-lm: training multi-billion parameter language models using model parallelism. arXiv preprint arXiv:1909.08053, 2019.">SPP+19</a>]</span></p>
+<p><img alt="image-20230419101507371" src="https://content.lz1.fun/2023/04/19/3a264d61197e8cb7adbc02b16be52291-cf1c4d.png" /></p>
+<p><img alt="image-20230419101516911" src="https://content.lz1.fun/2023/04/19/cbe1af7d100250aa25424422a92c6053-3950e2.png" /></p>
+<p><img alt="image-20230419101529488" src="https://content.lz1.fun/2023/04/19/32b39b14273fbd6639e865b9d4751935-236bbe.png" /></p>
 </section>
-<section id="id8">
-<h2>流水线并行<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="id12">
+<h2>流水线并行<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h2>
 <section id="pytorch-pipeline-gpipe">
 <h3>PyTorch: Pipeline (GPipe)<a class="headerlink" href="#pytorch-pipeline-gpipe" title="Permalink to this headline">#</a></h3>
+<p><span id="id13">[<a class="reference internal" href="#id29" title="Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Dehao Chen, Mia Chen, HyoukJoong Lee, Jiquan Ngiam, Quoc V Le, Yonghui Wu, and others. Gpipe: efficient training of giant neural networks using pipeline parallelism. Advances in neural information processing systems, 2019.">HCB+19</a>]</span></p>
+<p><img alt="image-20230419101241686" src="https://content.lz1.fun/2023/04/19/343da8235e75c287d8784a5df4cdaff0-383298.png" /></p>
+</section>
+<section id="deepspeed-pipeline-pipedream">
+<h3>DeepSpeed: Pipeline (PipeDream)<a class="headerlink" href="#deepspeed-pipeline-pipedream" title="Permalink to this headline">#</a></h3>
+<p><img alt="image-20230419101316831" src="https://content.lz1.fun/2023/04/19/6c09f28ab8b75bdcdb9fdaeba2194f95-6eff77.png" /></p>
+<p><span id="id14">[<a class="reference internal" href="#id32" title="Deepak Narayanan, Aaron Harlap, Amar Phanishayee, Vivek Seshadri, Nikhil R Devanur, Gregory R Ganger, Phillip B Gibbons, and Matei Zaharia. Pipedream: generalized pipeline parallelism for dnn training. In Proceedings of the 27th ACM Symposium on Operating Systems Principles, 1–15. 2019.">NHP+19</a>]</span></p>
 </section>
 </section>
-<section id="id9">
-<h2>如何选择并行策略<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<section id="id15">
+<h2>如何选择并行策略<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h2>
 <p><a class="reference external" href="https://huggingface.co/docs/transformers/perf_train_gpu_many">Efficient Training on Multiple GPUs (huggingface.co)</a></p>
 <p><img alt="image-20230419094208473" src="https://content.lz1.fun/2023/04/19/afb3ebb309bc701bf7bb96a7e81272bb-96dc60.png" /></p>
 </section>
-<section id="id10">
-<h2>显存优化技巧<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<section id="id16">
+<h2>显存优化技巧<a class="headerlink" href="#id16" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>Offload</p></li>
-<li><p>Checkpointing   (T. Chen, 2016)</p></li>
+<li><p>Checkpointing <span id="id17">[<a class="reference internal" href="#id30" title="Tianqi Chen, Bing Xu, Chiyuan Zhang, and Carlos Guestrin. Training deep nets with sublinear memory cost. arXiv preprint arXiv:1604.06174, 2016.">CXZG16</a>]</span></p></li>
 <li><p>优化器 LARS, LAMB, Adafactor</p></li>
 <li><p>梯度累加</p></li>
 <li><p>混合精度</p></li>
 </ul>
+<div class="docutils container" id="id18">
+<dl class="citation">
+<dt class="label" id="id30"><span class="brackets"><a class="fn-backref" href="#id17">CXZG16</a></span></dt>
+<dd><p>Tianqi Chen, Bing Xu, Chiyuan Zhang, and Carlos Guestrin. Training deep nets with sublinear memory cost. <em>arXiv preprint arXiv:1604.06174</em>, 2016.</p>
+</dd>
+<dt class="label" id="id29"><span class="brackets"><a class="fn-backref" href="#id13">HCB+19</a></span></dt>
+<dd><p>Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Dehao Chen, Mia Chen, HyoukJoong Lee, Jiquan Ngiam, Quoc V Le, Yonghui Wu, and others. Gpipe: efficient training of giant neural networks using pipeline parallelism. <em>Advances in neural information processing systems</em>, 2019.</p>
+</dd>
+<dt class="label" id="id32"><span class="brackets"><a class="fn-backref" href="#id14">NHP+19</a></span></dt>
+<dd><p>Deepak Narayanan, Aaron Harlap, Amar Phanishayee, Vivek Seshadri, Nikhil R Devanur, Gregory R Ganger, Phillip B Gibbons, and Matei Zaharia. Pipedream: generalized pipeline parallelism for dnn training. In <em>Proceedings of the 27th ACM Symposium on Operating Systems Principles</em>, 1–15. 2019.</p>
+</dd>
+<dt class="label" id="id26"><span class="brackets"><a class="fn-backref" href="#id7">RRRH20</a></span></dt>
+<dd><p>Samyam Rajbhandari, Jeff Rasley, Olatunji Ruwase, and Yuxiong He. Zero: memory optimizations toward training trillion parameter models. In <em>SC20: International Conference for High Performance Computing, Networking, Storage and Analysis</em>, 1–16. IEEE, 2020.</p>
+</dd>
+<dt class="label" id="id28"><span class="brackets"><a class="fn-backref" href="#id9">RRR+21</a></span></dt>
+<dd><p>Samyam Rajbhandari, Olatunji Ruwase, Jeff Rasley, Shaden Smith, and Yuxiong He. Zero-infinity: breaking the gpu memory wall for extreme scale deep learning. In <em>Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis</em>, 1–14. 2021.</p>
+</dd>
+<dt class="label" id="id27"><span class="brackets"><a class="fn-backref" href="#id8">RRA+21</a></span></dt>
+<dd><p>Jie Ren, Samyam Rajbhandari, Reza Yazdani Aminabadi, Olatunji Ruwase, Shuangyan Yang, Minjia Zhang, Dong Li, and Yuxiong He. Zero-offload: democratizing billion-scale model training. In <em>USENIX Annual Technical Conference</em>, 551–564. 2021.</p>
+</dd>
+<dt class="label" id="id31"><span class="brackets"><a class="fn-backref" href="#id11">SPP+19</a></span></dt>
+<dd><p>Mohammad Shoeybi, Mostofa Patwary, Raul Puri, Patrick LeGresley, Jared Casper, and Bryan Catanzaro. Megatron-lm: training multi-billion parameter language models using model parallelism. <em>arXiv preprint arXiv:1909.08053</em>, 2019.</p>
+</dd>
+</dl>
+</div>
 </section>
 </section>
 

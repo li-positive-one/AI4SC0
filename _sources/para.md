@@ -89,31 +89,53 @@
   - temporary buffers 
   - unusable fragmented memory
 
-[[1910.02054\] ](https://arxiv.org/abs/1910.02054)[ZeRO](https://arxiv.org/abs/1910.02054)[: Memory Optimizations Toward Training Trillion Parameter Models (arxiv.org)](https://arxiv.org/abs/1910.02054)
+Zero是由一系列论文{cite:p}`rajbhandari2020zero`，{cite:p}`ren2021zero`，{cite:p}`rajbhandari2021zero`构成的工作。
 
-[[2101.06840\] ](https://arxiv.org/abs/2101.06840)[ZeRO](https://arxiv.org/abs/2101.06840)[-Offload: Democratizing Billion-Scale Model Training (arxiv.org)](https://arxiv.org/abs/2101.06840)
-
-[[2104.07857\] ](https://arxiv.org/abs/2104.07857)[ZeRO](https://arxiv.org/abs/2104.07857)[-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning (arxiv.org)](https://arxiv.org/abs/2104.07857)
-
-
+![image-20230419100934516](https://content.lz1.fun/2023/04/19/2f9529dec0b2d5671310ad1701bf9f6c-a137bb.png)
 
 
 
 #### ZeRO-DP Stage1 : Optimizer State Partitioning
 
+![image-20230419100945385](https://content.lz1.fun/2023/04/19/83efbb1d198d0cb97c477d7719f10124-995aca.png)
+
 #### ZeRO-DP Stage2 : Gradient Partitioning
+
+![image-20230419100952229](https://content.lz1.fun/2023/04/19/6d44636600baa7bebd7baf50f567f61e-04724d.png)
 
 #### ZeRO-DP Stage3 : Parameter Partitioning
 
+![image-20230419100958591](https://content.lz1.fun/2023/04/19/6d44636600baa7bebd7baf50f567f61e-bdb33f.png)
+
 #### ZeRO-R 
+
+- Partitioned Activation Checkpointing
+
+- Constant Size Buffers
+
+- Memory Defragmentation
 
 #### Communication Analysis of ZeRO-DP 
 
+![image-20230419101022362](https://content.lz1.fun/2023/04/19/56423b415af042598d5291da82d98063-f31ba6.png)
+
 #### ZeRO-Offload
+
+![image-20230419101032576](https://content.lz1.fun/2023/04/19/79b41e2843578b487af68bd3faf5e8be-fc29f4.png)
+
+![image-20230419101053604](https://content.lz1.fun/2023/04/19/aaed3cc364fa223a13bc636657ea6e75-80450e.png)
+
+#### ZeRO-Infinity
+
+![image-20230419101144696](https://content.lz1.fun/2023/04/19/07ab8cb7b963d61378f7f4760f939240-f3fb1f.png)
+
+![image-20230419101153362](https://content.lz1.fun/2023/04/19/4598fbadc4e2fb92101f5e6b28249d96-f9eff4.png)
 
 
 
 ### PyTorch: FullyShardedDataParallel
+
+![image-20230419101215691](https://content.lz1.fun/2023/04/19/997e8b68e11cd5e54b93ed748ce4260a-cfedd0.png)
 
 ![image-20230419093749565](https://content.lz1.fun/2023/04/19/1c87aded2b7ee0b1a750346c50f73a7d-20a20a.png)
 
@@ -121,7 +143,16 @@
 
 ## 张量并行
 
-## Megatron-LM
+### Megatron-LM
+
+{cite:p}`shoeybi2019megatron`
+
+![image-20230419101507371](https://content.lz1.fun/2023/04/19/3a264d61197e8cb7adbc02b16be52291-cf1c4d.png)
+
+![image-20230419101516911](https://content.lz1.fun/2023/04/19/cbe1af7d100250aa25424422a92c6053-3950e2.png)
+
+
+![image-20230419101529488](https://content.lz1.fun/2023/04/19/32b39b14273fbd6639e865b9d4751935-236bbe.png)
 
 
 
@@ -129,8 +160,15 @@
 
 ### PyTorch: Pipeline (GPipe)
 
+{cite:p}`huang2019gpipe`
 
+![image-20230419101241686](https://content.lz1.fun/2023/04/19/343da8235e75c287d8784a5df4cdaff0-383298.png)
 
+### DeepSpeed: Pipeline (PipeDream)
+
+![image-20230419101316831](https://content.lz1.fun/2023/04/19/6c09f28ab8b75bdcdb9fdaeba2194f95-6eff77.png)
+
+{cite:p}`narayanan2019pipedream`
 
 
 ## 如何选择并行策略
@@ -144,7 +182,13 @@
 ## 显存优化技巧
 
 - Offload 
-- Checkpointing   (T. Chen, 2016)
+- Checkpointing {cite:p}`chen2016training`
 - 优化器 LARS, LAMB, Adafactor
 - 梯度累加
 - 混合精度
+
+
+
+```{bibliography}
+:filter: docname in docnames
+```
