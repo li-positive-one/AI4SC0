@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>大模型分布式训练 &#8212; AI4SC from Zero</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="补充资料" href="material.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">AI4SC from Zero</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to AI 4 SC from Zero
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  教程
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="python.html">
+   Python 入门
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_basic.html">
+     Python 基础
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example1_numpy.html">
+     Python 示例
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python_example2_vs_matlab.html">
+     Python和Matlab的差异
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="pytorch.html">
+   Pytorch 入门
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_install.html">
+     如何安装PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example1_numpy.html">
+     基于PyTorch的基本操作
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example2_rte.html">
+     使用PyTorch求解RTE(和Matlab代码对比)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_example3_nn.html">
+     使用PyTorch训练神经网络
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_struct.html">
+     PyTorch库的结构
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pytorch_func.html">
+     PyTorch的函数变换
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="neuraloperator.html">
+   Neural Operator
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fno.html">
+     Fourier neural operator
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="neuralsolution.html">
+   Neural Solution
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pinn-burgers.html">
+     PINN for burgers equation
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  补充
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="material.html">
+   补充资料
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   大模型分布式训练
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/li-positive-one/AI4SC0"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/li-positive-one/AI4SC0/issues/new?title=Issue%20on%20page%20%2Fpara.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/para.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   为什么我们需要机器学习的分布式训练？
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   分布式计算
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     通讯原语
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   分布式深度学习
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   数据并行
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#torch-distributed">
+     torch.distributed
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#torch-nn-dataparallel">
+     torch.nn.DataParallel
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#zero-redundancy-optimizer">
+     Zero Redundancy Optimizer
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-dp-stage1-optimizer-state-partitioning">
+       ZeRO-DP Stage1 : Optimizer State Partitioning
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-dp-stage2-gradient-partitioning">
+       ZeRO-DP Stage2 : Gradient Partitioning
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-dp-stage3-parameter-partitioning">
+       ZeRO-DP Stage3 : Parameter Partitioning
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-r">
+       ZeRO-R
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#communication-analysis-of-zero-dp">
+       Communication Analysis of ZeRO-DP
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-offload">
+       ZeRO-Offload
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pytorch-fullyshardeddataparallel">
+     PyTorch: FullyShardedDataParallel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   张量并行
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#megatron-lm">
+   Megatron-LM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   流水线并行
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pytorch-pipeline-gpipe">
+     PyTorch: Pipeline (GPipe)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id9">
+   如何选择并行策略
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id10">
+   显存优化技巧
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>大模型分布式训练</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   为什么我们需要机器学习的分布式训练？
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   分布式计算
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     通讯原语
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   分布式深度学习
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   数据并行
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#torch-distributed">
+     torch.distributed
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#torch-nn-dataparallel">
+     torch.nn.DataParallel
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#zero-redundancy-optimizer">
+     Zero Redundancy Optimizer
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-dp-stage1-optimizer-state-partitioning">
+       ZeRO-DP Stage1 : Optimizer State Partitioning
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-dp-stage2-gradient-partitioning">
+       ZeRO-DP Stage2 : Gradient Partitioning
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-dp-stage3-parameter-partitioning">
+       ZeRO-DP Stage3 : Parameter Partitioning
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-r">
+       ZeRO-R
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#communication-analysis-of-zero-dp">
+       Communication Analysis of ZeRO-DP
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zero-offload">
+       ZeRO-Offload
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pytorch-fullyshardeddataparallel">
+     PyTorch: FullyShardedDataParallel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   张量并行
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#megatron-lm">
+   Megatron-LM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   流水线并行
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pytorch-pipeline-gpipe">
+     PyTorch: Pipeline (GPipe)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id9">
+   如何选择并行策略
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id10">
+   显存优化技巧
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>大模型分布式训练<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<section id="id2">
+<h2>为什么我们需要机器学习的分布式训练？<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p><img alt="image-20230419091952898" src="https://content.lz1.fun/2023/04/19/c20a2f462765ae93a1e4182fc7793289-52750c.png" /></p>
+<ul class="simple">
+<li><p>模型规模迅速增加。2015年的 ResNet50 有2000万的参数， 2018年的 BERT-Large有3.45亿的参数，2018年的 GPT-2 有15亿的参数，而2020年的 GPT-3 有1750亿个参数。很明显，模型规模随着时间的推移呈指数级增长。目前最大的模型已经超过了1000多亿个参数。而与较小的模型相比，超大型模型通常能提供更优越的性能。图片来源: HuggingFace</p></li>
+<li><p>内存效率： 训练万亿参数模型的内存要求远远超出了单个 GPU 设备中可用的内存要求。以混合精度使用 Adam 优化器进行训练需要大约 16 TB 的内存来存储模型状态（参数、梯度和优化器状态）。相比之下，最先进的NVIDIA A100 GPU只有40千兆字节（GB）的内存。它需要 400 个这样的 GPU 的集体内存来存储模型状态。
+激活会消耗额外的内存，这些内存会随着批大小的增加而增加。仅使用单位批大小训练的万亿参数模型会产生超过 1 TB 的激活内存。激活检查点通过换取额外的计算将此内存减少到大约 20 GB，但内存要求对于训练来说仍然大得令人望而却步。
+模型状态和激活必须在可用的多个 GPU 设备之间有效分区，以使此类模型甚至可以在不耗尽内存的情况下开始训练。</p></li>
+<li><p>数据集规模迅速增加。对于大多数机器学习开发者来说，MNIST 和 CIFAR10 数据集往往是他们训练模型的前几个数据集。然而，与著名的 ImageNet 数据集相比，这些数据集非常小。谷歌甚至有自己的（未公布的）JFT-300M 数据集，它有大约3亿张图片，这比 ImageNet-1k 数据集大了近300倍。</p></li>
+<li><p>计算能力越来越强。随着半导体行业的进步，显卡变得越来越强大。由于核的数量增多，GPU是深度学习最常见的算力资源。从2012年的 K10 GPU 到2020年的 A100 GPU，计算能力已经增加了几百倍。这使我们能够更快地执行计算密集型任务，而深度学习正是这样一项任务。</p></li>
+<li><p>计算效率： 端到端训练一个万亿参数模型需要大约 5，000 个 zettaflops（即 5 个，后面有 24 个零;基于 OpenAI 的扩展工作定律）。训练这样一个模型需要 4，000 个 NVIDIA A100 GPUS，以 50% 的计算效率运行大约 100 天。
+虽然大型超级计算 GPU 集群可以拥有超过 4，000 个 GPU，但由于批量大小限制，在这种规模下实现高计算效率具有挑战性。计算效率随着通信时间的增加而提高。此比率与批量大小成正比。但是，可以训练模型的批量大小有一个上限，超过上限，收敛效率会迅速下降。
+世界上最大的模型之一 GPT-3 使用大约 1，500 的批量大小进行训练。对于 4，000 个 GPU，即使是 4，000 个的自由批处理大小也只允许每个 GPU 的批处理大小为 1，并限制了可扩展性。</p></li>
+</ul>
+<p>如今，我们接触到的模型可能太大，以致于无法装入一个GPU，而数据集也可能大到足以在一个GPU上训练一百天。这时，只有用不同的并行化技术在多个GPU上训练我们的模型，我们才能完成并加快模型训练，以追求在合理的时间内获得想要的结果。</p>
+</section>
+<section id="id3">
+<h2>分布式计算<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Amdahl’s law</p></li>
+<li><p>Gustafson’s law</p></li>
+</ul>
+<section id="id4">
+<h3>通讯原语<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<p><img alt="image-20230419092110089" src="https://content.lz1.fun/2023/04/19/174cbf3d9d17c1fa52184b3f86151273-d9167c.png" /></p>
+</section>
+</section>
+<section id="id5">
+<h2>分布式深度学习<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p><img src="https://content.lz1.fun/2023/04/19/b4747d8dee6b25963f42fcdf01f66aea-227351.png" alt="image-20230419092144203" style="zoom: 45%;" /><img src="https://content.lz1.fun/2023/04/19/5e87db76ccdbb474b8adfaad214b1561-30d474.png" alt="image-20230419092148651" style="zoom: 33%;" /></p>
+<ul class="simple">
+<li><p>数据并行</p></li>
+</ul>
+<p><img alt="image-20230419092428125" src="https://content.lz1.fun/2023/04/19/a722723d56f85564d9ea4627fd99a481-4a927b.png" /></p>
+<ul class="simple">
+<li><p>张量并行</p></li>
+</ul>
+<p><img alt="image-20230419092443414" src="https://content.lz1.fun/2023/04/19/72c9e1e70ea4206629f6d18cc812d187-3aa821.png" /></p>
+<ul class="simple">
+<li><p>流水线并行</p></li>
+</ul>
+<p><img alt="image-20230419093231140" src="https://content.lz1.fun/2023/04/19/e470d925db8690e77333a077bf5fb16f-47ccb8.png" /></p>
+<ul class="simple">
+<li><p>混合并行</p></li>
+</ul>
+<p><img alt="image-20230419093239423" src="https://content.lz1.fun/2023/04/19/bb46c443b72332e43977603645c512f7-3859aa.png" /></p>
+</section>
+<section id="id6">
+<h2>数据并行<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<section id="torch-distributed">
+<h3>torch.distributed<a class="headerlink" href="#torch-distributed" title="Permalink to this headline">#</a></h3>
+<p><img alt="image-20230419093407157" src="https://content.lz1.fun/2023/04/19/51868a12336aae6bcf4196a3bf12fff6-5cd5a4.png" /></p>
+<p><img alt="image-20230419093419094" src="https://content.lz1.fun/2023/04/19/fffc8dc6ecff34fd412770a311d929b3-ae45c2.png" /></p>
+</section>
+<section id="torch-nn-dataparallel">
+<h3>torch.nn.DataParallel<a class="headerlink" href="#torch-nn-dataparallel" title="Permalink to this headline">#</a></h3>
+<p><img alt="image-20230419093441321" src="https://content.lz1.fun/2023/04/19/690608502770a1c5b25816aa83332620-09b050.png" /></p>
+</section>
+<section id="zero-redundancy-optimizer">
+<h3>Zero Redundancy Optimizer<a class="headerlink" href="#zero-redundancy-optimizer" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>model states:</p>
+<ul>
+<li><p>optimizer states (such as momentum and variances in Adam</p></li>
+<li><p>Gradients</p></li>
+<li><p>parameters.</p></li>
+</ul>
+</li>
+<li><p>remaining memory:</p>
+<ul>
+<li><p>activation</p></li>
+<li><p>temporary buffers</p></li>
+<li><p>unusable fragmented memory</p></li>
+</ul>
+</li>
+</ul>
+<p>[<a class="reference external" href="https://arxiv.org/abs/1910.02054">1910.02054] </a><a class="reference external" href="https://arxiv.org/abs/1910.02054">ZeRO</a><a class="reference external" href="https://arxiv.org/abs/1910.02054">: Memory Optimizations Toward Training Trillion Parameter Models (arxiv.org)</a></p>
+<p>[<a class="reference external" href="https://arxiv.org/abs/2101.06840">2101.06840] </a><a class="reference external" href="https://arxiv.org/abs/2101.06840">ZeRO</a><a class="reference external" href="https://arxiv.org/abs/2101.06840">-Offload: Democratizing Billion-Scale Model Training (arxiv.org)</a></p>
+<p>[<a class="reference external" href="https://arxiv.org/abs/2104.07857">2104.07857] </a><a class="reference external" href="https://arxiv.org/abs/2104.07857">ZeRO</a><a class="reference external" href="https://arxiv.org/abs/2104.07857">-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning (arxiv.org)</a></p>
+<section id="zero-dp-stage1-optimizer-state-partitioning">
+<h4>ZeRO-DP Stage1 : Optimizer State Partitioning<a class="headerlink" href="#zero-dp-stage1-optimizer-state-partitioning" title="Permalink to this headline">#</a></h4>
+</section>
+<section id="zero-dp-stage2-gradient-partitioning">
+<h4>ZeRO-DP Stage2 : Gradient Partitioning<a class="headerlink" href="#zero-dp-stage2-gradient-partitioning" title="Permalink to this headline">#</a></h4>
+</section>
+<section id="zero-dp-stage3-parameter-partitioning">
+<h4>ZeRO-DP Stage3 : Parameter Partitioning<a class="headerlink" href="#zero-dp-stage3-parameter-partitioning" title="Permalink to this headline">#</a></h4>
+</section>
+<section id="zero-r">
+<h4>ZeRO-R<a class="headerlink" href="#zero-r" title="Permalink to this headline">#</a></h4>
+</section>
+<section id="communication-analysis-of-zero-dp">
+<h4>Communication Analysis of ZeRO-DP<a class="headerlink" href="#communication-analysis-of-zero-dp" title="Permalink to this headline">#</a></h4>
+</section>
+<section id="zero-offload">
+<h4>ZeRO-Offload<a class="headerlink" href="#zero-offload" title="Permalink to this headline">#</a></h4>
+</section>
+</section>
+<section id="pytorch-fullyshardeddataparallel">
+<h3>PyTorch: FullyShardedDataParallel<a class="headerlink" href="#pytorch-fullyshardeddataparallel" title="Permalink to this headline">#</a></h3>
+<p><img alt="image-20230419093749565" src="https://content.lz1.fun/2023/04/19/1c87aded2b7ee0b1a750346c50f73a7d-20a20a.png" /></p>
+</section>
+</section>
+<section id="id7">
+<h2>张量并行<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="megatron-lm">
+<h2>Megatron-LM<a class="headerlink" href="#megatron-lm" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="id8">
+<h2>流水线并行<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<section id="pytorch-pipeline-gpipe">
+<h3>PyTorch: Pipeline (GPipe)<a class="headerlink" href="#pytorch-pipeline-gpipe" title="Permalink to this headline">#</a></h3>
+</section>
+</section>
+<section id="id9">
+<h2>如何选择并行策略<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://huggingface.co/docs/transformers/perf_train_gpu_many">Efficient Training on Multiple GPUs (huggingface.co)</a></p>
+<p><img alt="image-20230419094208473" src="https://content.lz1.fun/2023/04/19/afb3ebb309bc701bf7bb96a7e81272bb-96dc60.png" /></p>
+</section>
+<section id="id10">
+<h2>显存优化技巧<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Offload</p></li>
+<li><p>Checkpointing   (T. Chen, 2016)</p></li>
+<li><p>优化器 LARS, LAMB, Adafactor</p></li>
+<li><p>梯度累加</p></li>
+<li><p>混合精度</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="material.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">补充资料</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Zhengyi Li<br/>
+  
+      &copy; Copyright 2023.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
