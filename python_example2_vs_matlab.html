@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Pytorch 入门" href="pytorch.html" />
-    <link rel="prev" title="Python 例1: 基于NumPy的基本操作" href="python_example1_numpy.html" />
+    <link rel="prev" title="Python 示例" href="python_example1_numpy.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -136,7 +136,7 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="python_example1_numpy.html">
-     Python 例1: 基于NumPy的基本操作
+     Python 示例
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -465,39 +465,44 @@ title="Print to PDF"
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id2">
-   创建变量
+   定义函数
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id3">
-   变量索引
+   张量运算
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id4">
-     索引
+     创建张量
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id5">
+     形状
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     索引
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
      切片
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     张量合并
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id6">
-   张量合并
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id7">
+  <a class="reference internal nav-link" href="#id9">
    读取与保存
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id8">
-   面向对象
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -531,39 +536,44 @@ title="Print to PDF"
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id2">
-   创建变量
+   定义函数
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id3">
-   变量索引
+   张量运算
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id4">
-     索引
+     创建张量
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id5">
+     形状
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     索引
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
      切片
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     张量合并
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id6">
-   张量合并
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id7">
+  <a class="reference internal nav-link" href="#id9">
    读取与保存
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id8">
-   面向对象
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -613,7 +623,37 @@ odd:9
 </div>
 </section>
 <section id="id2">
-<h2>创建变量<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<h2>定义函数<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1
+1
+2
+3
+5
+8
+13
+21
+34
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>张量运算<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<section id="id4">
+<h3>创建张量<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -626,8 +666,8 @@ odd:9
 </div>
 </div>
 </section>
-<section id="id3">
-<h2>变量索引<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<section id="id5">
+<h3>形状<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vector B:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
@@ -660,8 +700,9 @@ tensor B:
 </div>
 </div>
 </div>
-<section id="id4">
-<h3>索引<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+</section>
+<section id="id6">
+<h3>索引<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
@@ -677,8 +718,8 @@ tensor B:
 </div>
 </div>
 </section>
-<section id="id5">
-<h3>切片<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<section id="id7">
+<h3>切片<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:,:]</span>
@@ -702,9 +743,8 @@ tensor B:
 </div>
 </div>
 </section>
-</section>
-<section id="id6">
-<h2>张量合并<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<section id="id8">
+<h3>张量合并<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -730,8 +770,9 @@ tensor B:
 </div>
 </div>
 </section>
-<section id="id7">
-<h2>读取与保存<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="id9">
+<h2>读取与保存<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### 打开文件</span>
@@ -742,31 +783,6 @@ tensor B:
 <span class="c1">### 保存数组，读取数组</span>
 <span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="s2">&quot;A1.npz&quot;</span><span class="p">,</span><span class="n">A1</span><span class="o">=</span><span class="n">A1</span><span class="p">,</span><span class="n">A2</span><span class="o">=</span><span class="n">A2</span><span class="p">)</span>
 <span class="n">A1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;A1.npz&quot;</span><span class="p">)[</span><span class="s2">&quot;A1&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id8">
-<h2>面向对象<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">():</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">=</span><span class="n">x</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+=</span><span class="n">y</span>
-    <span class="k">def</span> <span class="nf">show_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        
-<span class="n">mc</span><span class="o">=</span><span class="n">MyClass</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">mc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">mc</span><span class="o">.</span><span class="n">show_x</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3
 </pre></div>
 </div>
 </div>
@@ -821,7 +837,7 @@ tensor B:
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Python 例1: 基于NumPy的基本操作</p>
+            <p class="prev-next-title">Python 示例</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="pytorch.html" title="next page">
