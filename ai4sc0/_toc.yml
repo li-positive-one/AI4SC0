@@ -27,5 +27,4 @@ parts:
     - file: pinn-burgers
 - caption: 补充
   chapters:
-  - file: usingAI
   - file: material
